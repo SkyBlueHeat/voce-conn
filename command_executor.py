@@ -8,6 +8,10 @@ from dotenv import load_dotenv
 from text_to_speech import get_tts_engine, speak_text
 import win32api
 import re
+import difflib
+import urllib.parse
+import win32gui
+import win32con
 
 # Windows specific media key control
 try:
@@ -502,19 +506,28 @@ class CommandExecutor:
                             for cmd_key, cmd_action in commands.items():
                                 if marker in cmd_key:
                                     # Arama kategorisini ve ne aramali belirlemeye çaliş
-                                    if before_marker:
-                                        if before_marker in cmd_key:
-                                            search_command = cmd_key
-                                            search_category = category
-                                            search_query = after_marker
-                                            break
-                                    else:
-                                        # Genel arama komutu
+                                    search_found = False
+                                    
+                                    # Önceki kısımda belirli bir arama türü belirtilmişse
+                                    if before_marker and any(domain in cmd_key for domain in ["google", "youtube", "wikipedia", "twitter", "harita"]):
+                                        for domain in ["google", "youtube", "wikipedia", "twitter", "harita"]:
+                                            if domain in before_marker and domain in cmd_key:
+                                                search_command = cmd_key
+                                                search_category = category
+                                                search_query = after_marker
+                                                search_found = True
+                                                break
+                                    
+                                    # Eğer özel bir arama türü belirtilmediyse ve "ara"/"bul" komutu varsa
+                                    if not search_found and (not before_marker.strip() or "google" in before_marker or "internet" in before_marker):
                                         if "google" in cmd_key or "internette" in cmd_key:
                                             search_command = cmd_key
                                             search_category = category
                                             search_query = after_marker
-                                            break
+                                            search_found = True
+                                    
+                                    if search_found:
+                                        break
                             
                             if search_command:
                                 break
@@ -522,15 +535,31 @@ class CommandExecutor:
         # Eğer arama komutu tespit edildiyse, onu kullan
         if search_command and search_category and search_query:
             cmd_action = self.commands[search_category][search_command]
+            
+            # Eğer sorgu boşsa, aramayı atla
+            if not search_query.strip():
+                return search_category, search_command, cmd_action
+                
             # ozel arama URL'sini oluştur
-            import urllib.parse
             search_encoded = urllib.parse.quote(search_query)
             
-            # URL sonunda "?q=" varsa oraya ekle, yoksa "?q=" ekleyip oyle ekle
+            # URL sonunda "?q=" varsa oraya ekle, yoksa sonuna ekle
             if "?q=" in cmd_action:
                 new_action = cmd_action.split("?q=")[0] + "?q=" + search_encoded
+            elif "search?q=" in cmd_action:
+                new_action = cmd_action.split("search?q=")[0] + "search?q=" + search_encoded
+            elif "search/?q=" in cmd_action:
+                new_action = cmd_action.split("search/?q=")[0] + "search/?q=" + search_encoded
+            elif "query=" in cmd_action:
+                new_action = cmd_action.split("query=")[0] + "query=" + search_encoded
+            elif "keywords=" in cmd_action:
+                new_action = cmd_action.split("keywords=")[0] + "keywords=" + search_encoded
             else:
                 new_action = cmd_action + search_encoded
+                
+            # Debug
+            if self.debug_mode:
+                print(f"Arama komutu oluşturuldu: {search_command} -> {new_action}")
                 
             return search_category, search_command, new_action
         
@@ -616,6 +645,8 @@ class CommandExecutor:
         # ozel kontroller
         if "konuşma modu" in recognized_text.lower() and "kapat" in recognized_text.lower():
             print("Konuşma modu kapatiliyor...")
+            if self.use_voice_feedback:
+                speak_text("Konuşma modu kapatılıyor")
             return True
             
         # once onbellekte komut var mi kontrol et
@@ -624,6 +655,9 @@ class CommandExecutor:
             if self.debug_mode:
                 print(f"onbellek kullaniliyor: {recognized_text}")
             category, cmd_key, cmd_action = self.command_cache[recognized_text]
+            
+            # Sekme/pencere bağlamı kontrolü için yeni algoritma
+            # Artık üstteki medya işleme kodu bu kontrolü daha iyi yapıyor
             return self._execute_command(category, cmd_key, cmd_action, recognized_text)
             
         self.cache_misses += 1
@@ -638,14 +672,25 @@ class CommandExecutor:
             
             # Benzer komutlari bul
             similar_commands = self._find_similar_commands(recognized_text)
-            if similar_commands and self.debug_mode:
-                print("Benzer komutlar bulundu:")
-                for sim_cmd in similar_commands[:3]:
-                    print(f" - {sim_cmd}")
-                    
+            if similar_commands and len(similar_commands) > 0:
+                if self.debug_mode:
+                    print("Benzer komutlar bulundu:")
+                    for sim_cmd in similar_commands[:3]:
+                        print(f" - {sim_cmd}")
+                
+                # İlk benzer komutu öner (tam hata mesajı yerine)
                 if self.use_voice_feedback:
-                    speak_text("Bu komutu anlamadim")
+                    if len(similar_commands) > 0:
+                        first_similar = similar_commands[0].split(": ")[1] if ": " in similar_commands[0] else similar_commands[0]
+                        speak_text(f"Bu komutu anlamadım. Belki {first_similar} demek istediniz?")
+                    else:
+                        speak_text("Bu komutu anlamadım")
                 return False
+            
+            # Hiç komut bulunamadıysa
+            if self.use_voice_feedback:
+                speak_text("Bu komutu anlamadım")
+            return False
             
         # onbelleğe ekle
         self.command_cache[recognized_text] = (category, cmd_key, cmd_action)
@@ -681,6 +726,49 @@ class CommandExecutor:
                     tab_number = int(tab_match.group(1))
                     self.current_context["browser_tabs"]["active_tab"] = tab_number
                 
+            # Medya başlat/durdur için aktif sekmeyi kontrol et
+            media_commands = ["başlat", "oynat", "durdur", "duraklat", "play", "pause"]
+            if any(cmd in original_text.lower() for cmd in media_commands):
+                # Aktif sekme bilgisini kontrol et
+                active_tab = self.current_context["browser_tabs"].get("active_tab", None)
+                
+                if active_tab is not None and active_tab > 0:
+                    if self.debug_mode:
+                        print(f"Medya komutu algılandı, aktif sekme {active_tab} için işlem yapılacak")
+                    
+                    # Önce tarayıcı penceresini odakla
+                    browser_focused = self.focus_browser_window()
+                    
+                    # Sonra sekmeye geç
+                    press_key_combination(f"ctrl+{active_tab}")
+                    time.sleep(0.8)  # Sekme geçişi için bekle
+                    
+                    # Eğer başlat/oynat ise space tuşu bas
+                    if any(cmd in original_text.lower() for cmd in ["başlat", "oynat", "play"]):
+                        press_key_combination("space")
+                        time.sleep(0.5)
+                        
+                        if self.debug_mode:
+                            print(f"Sekme {active_tab} için oynatma komutu uygulandı")
+                        
+                        if self.use_voice_feedback:
+                            speak_text("Oynatılıyor")
+                        
+                        return True
+                        
+                    # Eğer duraklat/durdur ise space tuşu bas
+                    elif any(cmd in original_text.lower() for cmd in ["durdur", "duraklat", "pause"]):
+                        press_key_combination("space")
+                        time.sleep(0.5)
+                        
+                        if self.debug_mode:
+                            print(f"Sekme {active_tab} için durdurma komutu uygulandı")
+                        
+                        if self.use_voice_feedback:
+                            speak_text("Durduruldu")
+                        
+                        return True
+            
             # Medya tuşu ve tam ekran takibi
             if cmd_action == "mediaplaypause":
                 self.current_context["media_playing"] = not self.current_context["media_playing"]
@@ -691,13 +779,241 @@ class CommandExecutor:
             if category == "uygulamalar" and "aç" in cmd_key:
                 app_name = cmd_key.replace(" aç", "")
                 self.current_context["active_app"] = app_name
+            
+            # Netflix kategori komutları için özel işleme
+            if category == "netflix" and cmd_action.startswith("noop+simulateKey:"):
+                keys = cmd_action.replace("noop+simulateKey:", "")
+                if self.debug_mode:
+                    print(f"Netflix komutunu çalıştırıyorum: {keys}")
                 
-            # Medya key komutlari için
-            if category == "medya" or cmd_action in ["volumeup", "volumedown", "volumemute"]:
+                press_key_combination(keys)
+                time.sleep(0.5)
+                
+                if self.execution_callback:
+                    self.execution_callback(True, f"Netflix komutu: {cmd_key}")
+                
+                if self.use_voice_feedback:
+                    speak_text(f"{cmd_key}")
+                
+                return True
+                
+            # YouTube kategori komutları için özel işleme - ekstra özen göstererek
+            if category == "youtube" and cmd_action.startswith("noop+simulateKey:"):
+                keys = cmd_action.replace("noop+simulateKey:", "")
+                if self.debug_mode:
+                    print(f"YouTube komutunu çalıştırıyorum: {keys}")
+                
+                # Özel YouTube komutları
+                if "tam ekran" in cmd_key.lower() or "fullscreen" in cmd_key.lower() or "ekrani buyut" in cmd_key.lower():
+                    # YouTube'da tam ekran için önce pencereye odaklan, sonra F ile tam ekran yap
+                    if self.debug_mode:
+                        print("YouTube için tam ekran komutu kullanılıyor")
+                    
+                    # Önce tarayıcı penceresini bul ve ona odaklan
+                    browser_focused = self.focus_browser_window()
+                    
+                    if not browser_focused:
+                        # Tarayıcı bulunamadıysa ALT+TAB dene
+                        press_key_combination("alt+tab")
+                        time.sleep(0.7)
+                    
+                    # Tam ekran durumuna göre işlem yap
+                    if not self.current_context.get("fullscreen_active", False):
+                        # YouTube için F tuşu tam ekran için yeterli
+                        press_key_combination("f")
+                        time.sleep(0.7)  # Geçiş için yeterli süre
+                        
+                        # Bağlam güncelle
+                        self.current_context["fullscreen_active"] = True
+                        
+                        if self.debug_mode:
+                            print("YouTube tam ekran modu aktifleştirildi")
+                    else:
+                        if self.debug_mode:
+                            print("Zaten tam ekran modunda")
+                            
+                elif "tam ekrandan çik" in cmd_key.lower() or "normal ekran" in cmd_key.lower() or "ekrani kuçult" in cmd_key.lower():
+                    # Tam ekrandan çıkmak için önce pencereye odaklan sonra ESC veya F tuşları
+                    if self.debug_mode:
+                        print("YouTube için tam ekrandan çıkma komutu kullanılıyor")
+                    
+                    # Önce tarayıcı penceresini bul ve ona odaklan
+                    browser_focused = self.focus_browser_window()
+                    
+                    if not browser_focused:
+                        # Tarayıcı bulunamadıysa ALT+TAB dene
+                        press_key_combination("alt+tab")
+                        time.sleep(0.7)
+                    
+                    # Tam ekran durumuna göre işlem yap
+                    if self.current_context.get("fullscreen_active", False):
+                        # YouTube'da F tuşu tam ekran açma/kapama için çalışır
+                        press_key_combination("f")
+                        time.sleep(0.7)
+                        
+                        # Bağlam güncelle
+                        self.current_context["fullscreen_active"] = False
+                        
+                        if self.debug_mode:
+                            print("YouTube normal ekran moduna döndürüldü")
+                    else:
+                        if self.debug_mode:
+                            print("Zaten normal ekran modunda")
+                else:
+                    # Normal komut yürütme
+                    press_key_combination(keys)
+                    time.sleep(0.3)
+                
+                if self.execution_callback:
+                    self.execution_callback(True, f"YouTube komutu: {cmd_key}")
+                
+                if self.use_voice_feedback:
+                    speak_text(f"{cmd_key}")
+                
+                return True
+            
+            # Ekran komutları için özel işleme (tam ekran vb.)
+            if category == "ekran" and cmd_action.startswith("noop+simulateKey:"):
+                keys = cmd_action.replace("noop+simulateKey:", "")
+                if self.debug_mode:
+                    print(f"Ekran komutunu çalıştırıyorum: {keys}")
+                
+                # Tam ekran komutları için özel işleme
+                if "f11" in keys.lower():
+                    # Önce tarayıcı penceresini bul ve ona odaklan
+                    browser_focused = self.focus_browser_window()
+                    
+                    if not browser_focused:
+                        # Tarayıcı bulunamadıysa ALT+TAB dene
+                        press_key_combination("alt+tab")
+                        time.sleep(0.7)
+                    
+                    # Bağlam durumuna göre işlem yap
+                    if not self.current_context.get("fullscreen_active", False):
+                        # F11 tuşuna bas
+                        press_key_combination("f11")
+                        time.sleep(0.7)
+                        
+                        # Bağlam güncelle
+                        self.current_context["fullscreen_active"] = True
+                        
+                        if self.debug_mode:
+                            print("Tarayıcı tam ekran modu aktifleştirildi")
+                    else:
+                        if self.debug_mode:
+                            print("Zaten tam ekran modunda")
+                
+                elif "escape" in keys.lower():
+                    # Önce tarayıcı penceresini bul ve ona odaklan
+                    browser_focused = self.focus_browser_window()
+                    
+                    if not browser_focused:
+                        # Tarayıcı bulunamadıysa ALT+TAB dene
+                        press_key_combination("alt+tab")
+                        time.sleep(0.7)
+                    
+                    # Tam ekran durumunu kontrol et
+                    if self.current_context.get("fullscreen_active", False):
+                        # Escape tuşuna bas
+                        press_key_combination("escape")
+                        time.sleep(0.7)
+                        
+                        # F11 ile tarayıcıyı tam ekrandan çıkar (gerekliyse)
+                        press_key_combination("f11")
+                        time.sleep(0.7)
+                        
+                        # Bağlam güncelle
+                        self.current_context["fullscreen_active"] = False
+                        
+                        if self.debug_mode:
+                            print("Tarayıcı normal ekran moduna döndürüldü")
+                    else:
+                        # Sadece Escape tuşuna bas
+                        press_key_combination("escape")
+                        time.sleep(0.5)
+                        
+                        if self.debug_mode:
+                            print("Escape tuşu basıldı (normal mod)")
+                else:
+                    # Normal tuş basma
+                    press_key_combination(keys)
+                    time.sleep(0.5)
+                
+                if self.execution_callback:
+                    self.execution_callback(True, f"Ekran komutu: {cmd_key}")
+                
+                if self.use_voice_feedback:
+                    speak_text(f"{cmd_key}")
+                
+                return True
+                
+            # Sistem ses kontrolü komutları için
+            if category == "sistem" and cmd_action in ["volumeup", "volumedown", "volumemute"]:
+                # Komut türüne göre doğru mesaj gösterme
+                result = self._handle_media_command(cmd_action)
+                time.sleep(0.7)  # Medya komutlari sonrasi bekle
+                
+                if self.execution_callback:
+                    if cmd_action == "volumeup":
+                        self.execution_callback(True, "Ses seviyesi artırıldı")
+                    elif cmd_action == "volumedown":
+                        self.execution_callback(True, "Ses seviyesi azaltıldı")
+                    elif cmd_action == "volumemute":
+                        self.execution_callback(True, "Ses kapatıldı/açıldı")
+                
+                if self.use_voice_feedback:
+                    speak_text(f"{cmd_key}")
+                return result
+                
+            # Medya komutları için özel işlem (tam ekran vb.)
+            if category == "medya" and cmd_action.startswith("noop+simulateKey:"):
+                keys = cmd_action.replace("noop+simulateKey:", "")
+                if self.debug_mode:
+                    print(f"Medya komutunu çalıştırıyorum: {keys}")
+                
+                # Tam ekran ile ilgili medya komutları için
+                if keys.lower() == "f" and ("tam ekran" in cmd_key.lower() or "ekrani buyut" in cmd_key.lower()):
+                    # Önce tarayıcı penceresini bul ve ona odaklan
+                    browser_focused = self.focus_browser_window()
+                    
+                    if not browser_focused:
+                        # Tarayıcı bulunamadıysa ALT+TAB dene
+                        press_key_combination("alt+tab")
+                        time.sleep(0.7)
+                    
+                    # Tam ekrana geçiş durumunu kontrol et
+                    if not self.current_context.get("fullscreen_active", False):
+                        # Sadece F tuşuna bas (YouTube tam ekranı)
+                        press_key_combination("f")
+                        time.sleep(0.7)  # Geçiş için bekle
+                        
+                        # Bağlam güncelle
+                        self.current_context["fullscreen_active"] = True
+                        
+                        if self.debug_mode:
+                            print("Medya tam ekran modu aktifleştirildi")
+                    else:
+                        if self.debug_mode:
+                            print("Zaten tam ekran modundayız. İşlem yapılmadı.")
+                else:
+                    # Normal tuş basma
+                    press_key_combination(keys)
+                    time.sleep(0.5)
+                
+                if self.execution_callback:
+                    self.execution_callback(True, f"Medya komutu uygulandi")
+                
+                if self.use_voice_feedback:
+                    speak_text(f"{cmd_key}")
+                
+                return True
+            
+            # Standart medya tuşları için
+            elif category == "medya":
                 result = self._handle_media_command(cmd_action)
                 time.sleep(0.7)  # Medya komutlari sonrasi bekle
                 if self.use_voice_feedback:
-                    speak_text(f"{cmd_key} komutu çaliştirildi")
+                    speak_text(f"{cmd_key}")
                 return result
             
             # Chrome sekme komutlari
@@ -706,23 +1022,116 @@ class CommandExecutor:
                 if self.debug_mode:
                     print(f"Chrome sekme komutunu çaliştiriyorum: {keys}")
                 
-                press_key_combination(keys)
-                time.sleep(0.5)
+                # Sekme geçişleri için özel işleme
+                sekme_numarasi = None
                 
+                # 9 ve 10. sekme için özel durum kontrolü
+                if "ctrl+9" in keys:
+                    # Komut doğrudan "son sekme" vb. mi?
+                    if "son" in cmd_key.lower() or "son" in original_text.lower():
+                        # Bu durumda son sekmeye gitmek istiyoruz
+                        sekme_numarasi = -1  # Son sekme için özel değer
+                        if self.debug_mode:
+                            print("Son sekmeye geçiliyor (Ctrl+9)")
+                    else:
+                        # 9. sekmeye gitmek istiyoruz
+                        sekme_numarasi = 9
+                        if self.debug_mode:
+                            print("9. sekmeye geçiliyor")
+                
+                # Numaralı bir sekmeye geçiş mi?
+                elif "ctrl+" in keys and keys[-1].isdigit():
+                    sekme_numarasi = int(keys[-1])
+                    if sekme_numarasi == 0:  # Ctrl+0 = 10. sekme
+                        sekme_numarasi = 10
+                    if self.debug_mode:
+                        print(f"Sekme {sekme_numarasi}'e geçiliyor")
+                
+                # Alt tuşu ile sekmelere erişim (11-15)
+                elif "alt+" in keys and keys[-1].isdigit():
+                    alt_num = int(keys[-1])
+                    if 1 <= alt_num <= 5:  # Alt+1 - Alt+5 -> 11-15. sekmeler
+                        sekme_numarasi = 10 + alt_num
+                        if self.debug_mode:
+                            print(f"Sekme {sekme_numarasi}'e geçiliyor (Alt+{alt_num})")
+                
+                # Komut içinde doğrudan bir sayı varsa (ör: "6 sekme" veya "sekme 6" veya "tekme 6")
+                elif cmd_key.lower().find('sekme') >= 0 or original_text.lower().find('sekme') >= 0 or original_text.lower().find('tekme') >= 0:
+                    # Önce komuttaki sayıyı bul
+                    tab_match = re.search(r'(\d+)', original_text)
+                    if tab_match:
+                        sekme_numarasi = int(tab_match.group(1))
+                        if 0 < sekme_numarasi <= 15:  # 1-15 arası sekmelere geçiş
+                            # keys değişkenini güncelle
+                            if sekme_numarasi == 9:
+                                # 9. sekme için özel tuş kombinasyonu - genelde CTRL+9 son sekmeye götürür
+                                keys = "ctrl+9"
+                            elif sekme_numarasi == 10:
+                                keys = "ctrl+0"
+                            elif sekme_numarasi > 10:
+                                keys = f"alt+{sekme_numarasi-10}"
+                            else:
+                                keys = f"ctrl+{sekme_numarasi}"
+                                
+                            if self.debug_mode:
+                                print(f"Algılanan sekme numarası: {sekme_numarasi}, yeni komut: {keys}")
+                
+                # "Son sekme" özel durumu
+                elif "son sekme" in original_text.lower() or "son tab" in original_text.lower():
+                    keys = "ctrl+9"  # Chrome'da Ctrl+9 son sekmeye geçer
+                    sekme_numarasi = -1  # Son sekme için özel değer
+                    if self.debug_mode:
+                        print("Son sekmeye geçiliyor (Ctrl+9)")
+                
+                # Sekme geçişini gerçekleştir
+                press_key_combination(keys)
+                time.sleep(0.7)  # Sekme geçişi için daha uzun bekle
+                
+                # Sekme geçişi sonrası bağlam güncelleme
+                if sekme_numarasi is not None:
+                    if sekme_numarasi == -1:  # Son sekme özel durumu
+                        self.current_context["browser_tabs"]["active_tab"] = "son_sekme"
+                        command_message = "Son sekmeye geçildi"
+                    else:
+                        self.current_context["browser_tabs"]["active_tab"] = sekme_numarasi
+                        command_message = f"Sekme {sekme_numarasi}'e geçildi"
+                    
+                    self.current_context["active_app"] = "chrome"
+                    
+                    # Bağlamı güncellemek için küçük bir bekleme ve bildirim
+                    if self.debug_mode:
+                        print(f"Bağlam güncellendi: Aktif sekme {sekme_numarasi}")
+                    
+                    # 250ms bekle (sekme geçişinin tamamlanması için)
+                    time.sleep(0.25)
+                    
                 if self.execution_callback:
-                    self.execution_callback(True, "Sekme değiştirildi")
+                    if sekme_numarasi:
+                        if sekme_numarasi == -1:
+                            command_message = "Son sekmeye geçildi"
+                        else:
+                            command_message = f"Sekme {sekme_numarasi}'e geçildi"
+                    else:
+                        command_message = f"Sekme komutu: {cmd_key}"
+                    self.execution_callback(True, command_message)
                 
                 if self.use_voice_feedback:
-                    speak_text(f"{cmd_key} komutu uygulandi")
+                    if sekme_numarasi:
+                        if sekme_numarasi == -1:
+                            speak_text("Son sekmeye geçildi")
+                        else:
+                            speak_text(f"Sekme {sekme_numarasi}'e geçildi")
+                    else:
+                        speak_text(f"{cmd_key}")
                 
                 return True
-                
+            
             # Normal sistem komutlari
             result = self._execute_system_command(cmd_action)
             time.sleep(0.5)
             
             if self.use_voice_feedback:
-                speak_text(f"{cmd_key} komutu çaliştirildi")
+                speak_text(f"{cmd_key}")
             return result
                 
         except Exception as e:
@@ -752,15 +1161,72 @@ class CommandExecutor:
                     speak_text("Tam ekran yapildi")
                     return True
             
-            # Sekme ile ilgili komutlar
-            if "sekme" in text.lower():
+            # Sekme ile ilgili komutlar - Daha esnek tanıma algoritması
+            if "sekme" in text.lower() or "sek" in text.lower() or "tekme" in text.lower():
+                # Son sekmeye geçiş
+                if "son" in text.lower() and ("sekme" in text.lower() or "tab" in text.lower()):
+                    press_key_combination("ctrl+9")  # Chrome'da son sekmeye geçmek için Ctrl+9
+                    time.sleep(0.5)
+                    self.current_context["browser_tabs"]["active_tab"] = "son_sekme"
+                    self.current_context["active_app"] = "chrome"
+                    speak_text("Son sekmeye geçildi")
+                    return True
+                
+                # Önce regex ile tüm sayıları çıkar
                 tab_match = re.search(r'(\d+)', text)
                 if tab_match:
                     tab_number = int(tab_match.group(1))
-                    if 0 < tab_number < 10:  # 1-9 arasi sekmelere geçiş
-                        press_key_combination(f"ctrl+{tab_number}")
+                    if 0 < tab_number <= 15:  # 1-15 arası sekmelere geçiş
+                        if self.debug_mode:
+                            print(f"Sekme komutu algılandı, {tab_number}. sekmeye geçiş yapılıyor")
+                        
+                        # 9 ve üzeri için farklı tuş kombinasyonları
+                        if tab_number == 9:
+                            # 9. sekme için özel durum
+                            key_combo = "ctrl+9"
+                        elif tab_number == 10:
+                            key_combo = "ctrl+0"
+                        elif tab_number > 10 and tab_number <= 15:
+                            # 11-15 arası sekmeler için Alt+1 - Alt+5 kombinasyonlarını kullan
+                            key_combo = f"alt+{tab_number-10}"
+                        else:
+                            key_combo = f"ctrl+{tab_number}"
+                            
+                        press_key_combination(key_combo)
+                        time.sleep(0.5)  # Sekme geçişini bekle
                         self.current_context["browser_tabs"]["active_tab"] = tab_number
+                        self.current_context["active_app"] = "chrome"
                         speak_text(f"Sekme {tab_number}'e geçildi")
+                        return True
+                
+                # Rakam yazı ile yazılmış olabilir
+                number_words = {
+                    "bir": 1, "iki": 2, "üç": 3, "üc": 3, "dört": 4, "dort": 4, "beş": 5, "bes": 5,
+                    "altı": 6, "alti": 6, "yedi": 7, "sekiz": 8, "dokuz": 9, "on": 10,
+                    "onbir": 11, "oniki": 12, "onüç": 13, "ondört": 14, "onbeş": 15
+                }
+                
+                for word, num in number_words.items():
+                    if word in text.lower():
+                        if self.debug_mode:
+                            print(f"Sekme komutu algılandı (yazı ile), {num}. sekmeye geçiş yapılıyor")
+                        
+                        # 9 ve üzeri için farklı tuş kombinasyonları
+                        if num == 9:
+                            # 9. sekme için özel durum
+                            key_combo = "ctrl+9"
+                        elif num == 10:
+                            key_combo = "ctrl+0"
+                        elif num > 10 and num <= 15:
+                            key_combo = f"alt+{num-10}"
+                        else:
+                            key_combo = f"ctrl+{num}"
+                            
+                        press_key_combination(key_combo)
+                        time.sleep(0.5)  # Sekme geçişini bekle
+                        self.current_context["browser_tabs"]["active_tab"] = num
+                        self.current_context["active_app"] = "chrome"
+                        speak_text(f"Sekme {num}'e geçildi")
                         return True
             
             # "Filmi/videoyu başlat" gibi medya komutlari
@@ -880,3 +1346,71 @@ class CommandExecutor:
             hit_rate = (self.cache_hits / total) * 100
             print(f"onbellek istatistikleri: {self.cache_hits} hit, {self.cache_misses} miss, {hit_rate:.1f}% hit rate")
             print(f"onbellek boyutu: {len(self.command_cache)} komut")
+
+    def focus_browser_window(self):
+        """Focus the browser window (Chrome, Firefox, Edge etc) or a video player window"""
+        if os.name != 'nt' or not win32gui:
+            print("Browser window focus not supported on this platform")
+            return False
+            
+        try:
+            # Tarayıcı isimlerini tanımla
+            browser_titles = ["chrome", "google chrome", "firefox", "mozilla firefox", 
+                            "edge", "microsoft edge", "youtube", "netflix", "video"]
+            
+            found_window = None
+            found_windows = []
+            
+            def enum_windows_callback(hwnd, windows_list):
+                # Pencere görünür mü ve başlığı var mı
+                if win32gui.IsWindowVisible(hwnd) and win32gui.GetWindowText(hwnd):
+                    window_text = win32gui.GetWindowText(hwnd).lower()
+                    # Başlık içinde tarayıcı adı ya da video sitesi adı var mı
+                    for title in browser_titles:
+                        if title in window_text:
+                            windows_list.append((hwnd, window_text))
+                            break
+                return True
+            
+            # Tüm pencereleri tara
+            win32gui.EnumWindows(enum_windows_callback, found_windows)
+            
+            if found_windows:
+                # YouTube veya Netflix gibi pencereler öncelikli
+                for hwnd, title in found_windows:
+                    if "youtube" in title or "netflix" in title or "video" in title:
+                        found_window = hwnd
+                        break
+                
+                # YouTube/Netflix bulunamadıysa herhangi bir tarayıcı kullan
+                if not found_window and found_windows:
+                    found_window = found_windows[0][0]
+                    
+            if found_window:
+                try:
+                    # Pencereyi ön plana getir
+                    win32gui.SetForegroundWindow(found_window)
+                    # Pencereyi normal boyuta getir (minimize değilse)
+                    if win32gui.IsIconic(found_window):
+                        win32gui.ShowWindow(found_window, win32con.SW_RESTORE)
+                    # Tekrar odaklan
+                    win32gui.SetForegroundWindow(found_window)
+                    
+                    if self.debug_mode:
+                        print(f"Browser window focused: {win32gui.GetWindowText(found_window)}")
+                    return True
+                except Exception as e:
+                    print(f"Failed to focus window: {e}")
+                    
+            # Pencere bulunamadı, ALT+TAB kullan
+            if not found_window:
+                if self.debug_mode:
+                    print("No browser window found, trying ALT+TAB")
+                press_key_combination("alt+tab")
+                time.sleep(0.5)
+                
+        except Exception as e:
+            print(f"Browser window focus error: {e}")
+            return False
+            
+        return False
