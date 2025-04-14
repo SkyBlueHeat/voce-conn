@@ -591,7 +591,7 @@ class CommandExecutor:
         if best_match:
             return best_match_category, best_match, best_match_action
         else:
-        return None, None, None
+            return None, None, None
     
     def execute(self, recognized_text):
         """Execute a recognized command"""
@@ -608,7 +608,7 @@ class CommandExecutor:
         for cmd in exit_commands:
             if cmd in recognized_text.lower():
                 print("Çıkış komutu algılandı. Program kapatılıyor...")
-            if self.use_voice_feedback:
+                if self.use_voice_feedback:
                     speak_text("Asistan kapatılıyor")
                 self.exit_requested = True
                 return True
@@ -634,7 +634,7 @@ class CommandExecutor:
         if not category or not cmd_key or not cmd_action:
             # Bağlam tabanlı akıllı karar verme
             if self._try_context_based_execution(recognized_text):
-            return True
+                return True
             
             # Benzer komutları bul
             similar_commands = self._find_similar_commands(recognized_text)
@@ -644,8 +644,8 @@ class CommandExecutor:
                     print(f" - {sim_cmd}")
                     
                 if self.use_voice_feedback:
-                speak_text("Bu komutu anlamadım")
-            return False
+                    speak_text("Bu komutu anlamadım")
+                return False
             
         # Önbelleğe ekle
         self.command_cache[recognized_text] = (category, cmd_key, cmd_action)
@@ -687,9 +687,9 @@ class CommandExecutor:
             if category == "medya" or cmd_action in ["volumeup", "volumedown", "volumemute"]:
                 result = self._handle_media_command(cmd_action)
                 time.sleep(0.7)  # Medya komutları sonrası bekle
-                        if self.use_voice_feedback:
+                if self.use_voice_feedback:
                     speak_text(f"{cmd_key} komutu çalıştırıldı")
-                        return result
+                return result
             
             # Chrome sekme komutları
             if category == "chrome" and cmd_action.startswith("noop+simulateKey:"):
@@ -697,8 +697,8 @@ class CommandExecutor:
                 if self.debug_mode:
                     print(f"Chrome sekme komutunu çalıştırıyorum: {keys}")
                 
-                        press_key_combination(keys)
-                        time.sleep(0.5)
+                press_key_combination(keys)
+                time.sleep(0.5)
                 
                 if self.execution_callback:
                     self.execution_callback(True, "Sekme değiştirildi")
