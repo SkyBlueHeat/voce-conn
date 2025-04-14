@@ -1,51 +1,51 @@
-﻿# Voce-Con: Türkçe Sesli Asistan Kurulum ve Kullanım Kılavuzu
+﻿# Voce-Con: Turkçe Sesli Asistan Kurulum ve Kullanim Kilavuzu
 
-Bu proje, Windows ortamında çalışan, Türkçe sesli komutlarla bilgisayarınızı kontrol etmenizi sağlayan bir sesli asistan uygulamasıdır. "Jarvis" gibi bir aktivasyon sözcüğü ile uyandırılabilen asistan, web tarayıcı kontrolü, medya oynatıcı kontrolü, sistem sesi ayarları, uygulama açma ve daha birçok işlevi sesli komutlarla gerçekleştirebilir.
+Bu proje, Windows ortaminda çalişan, Turkçe sesli komutlarla bilgisayarinizi kontrol etmenizi sağlayan bir sesli asistan uygulamasidir. "Jarvis" gibi bir aktivasyon sozcuğu ile uyandirilabilen asistan, web tarayici kontrolu, medya oynatici kontrolu, sistem sesi ayarlari, uygulama açma ve daha birçok işlevi sesli komutlarla gerçekleştirebilir.
 
-## Başlangıç
+## Başlangiç
 
-Bu projeyi çalıştırmak için aşağıdaki adımları takip edin:
+Bu projeyi çaliştirmak için aşağidaki adimlari takip edin:
 
 ### Sistem Gereksinimleri
 
-- Windows 10 veya daha yeni bir Windows sürümü
-- Python 3.10 veya daha yeni bir sürüm
-- Çalışan bir mikrofon
-- İnternet bağlantısı (bazı modeller için)
+- Windows 10 veya daha yeni bir Windows surumu
+- Python 3.10 veya daha yeni bir surum
+- Çalişan bir mikrofon
+- İnternet bağlantisi (bazi modeller için)
 
-### Kurulum Adımları
+### Kurulum Adimlari
 
-1. **Projeyi klonlayın:**
+1. **Projeyi klonlayin:**
 
-2. **Bağımlılıkları yükleyin:**
+2. **Bağimliliklari yukleyin:**
 
-Projeyi indirdikten sonra, `install_dependencies.bat` dosyasını çalıştırarak gerekli tüm bağımlılıkları otomatik olarak yükleyebilirsiniz:
+Projeyi indirdikten sonra, `install_dependencies.bat` dosyasini çaliştirarak gerekli tum bağimliliklari otomatik olarak yukleyebilirsiniz:
 
 ```bash
 install_dependencies.bat
 ```
 
-Bu komut aşağıdaki Python paketlerini yükleyecektir:
+Bu komut aşağidaki Python paketlerini yukleyecektir:
 - speech_recognition
 - pyttsx3
 - pyaudio
-- pvporcupine (uyandırma sözcüğü algılama için)
+- pvporcupine (uyandirma sozcuğu algilama için)
 - edge-tts (doğal konuşma sentezi için)
-- python-dotenv (konfigürasyon için)
+- python-dotenv (konfigurasyon için)
 - pygame (ses çalma için)
 - ctypes, win32api (Windows API ile etkileşim için)
 
 3. **Modelleri indirin:**
 
-Eğer `download_model.py` dosyası mevcutsa, bu dosyayı çalıştırarak konuşma tanıma veya TTS (Text-to-Speech) için gereken modelleri indirin:
+Eğer `download_model.py` dosyasi mevcutsa, bu dosyayi çaliştirarak konuşma tanima veya TTS (Text-to-Speech) için gereken modelleri indirin:
 
 ```bash
 python download_model.py
 ```
 
-4. **Konfigürasyon:**
+4. **Konfigurasyon:**
 
-Proje kök dizinindeki `.env` dosyasını düzenleyerek temel ayarları yapılandırabilirsiniz:
+Proje kok dizinindeki `.env` dosyasini duzenleyerek temel ayarlari yapilandirabilirsiniz:
 
 ```
 WAKE_WORD=jarvis
@@ -58,111 +58,111 @@ CONVERSATION_TIMEOUT=60
 ```
 
 Bu ayarlar:
-- **WAKE_WORD**: Asistanı aktifleştirmek için kullanılan sözcük ("jarvis", "alexa", "hey google" vb.)
-- **SENSITIVITY**: Uyandırma sözcüğü duyarlılığı (0.0 - 1.0)
+- **WAKE_WORD**: Asistani aktifleştirmek için kullanilan sozcuk ("jarvis", "alexa", "hey google" vb.)
+- **SENSITIVITY**: Uyandirma sozcuğu duyarliliği (0.0 - 1.0)
 - **VOICE_FEEDBACK**: Sesli geri bildirim (true/false)
 - **TTS_ENGINE**: Metin-konuşma motoru (edge-tts veya pyttsx3)
 - **EDGE_TTS_VOICE**: Edge TTS ses modeli
-- **DEBUG_MODE**: Detaylı hata ayıklama bilgileri (true/false)
-- **CONVERSATION_TIMEOUT**: Konuşma modunun zaman aşımı süresi (saniye)
+- **DEBUG_MODE**: Detayli hata ayiklama bilgileri (true/false)
+- **CONVERSATION_TIMEOUT**: Konuşma modunun zaman aşimi suresi (saniye)
 
-## Asistanı Çalıştırma
+## Asistani Çaliştirma
 
-Asistanı çalıştırmak için iki yöntem mevcuttur:
+Asistani çaliştirmak için iki yontem mevcuttur:
 
-### 1. Doğrudan Python ile çalıştırma:
+### 1. Doğrudan Python ile çaliştirma:
 
 ```bash
 python main.py
 ```
 
-### 2. Hazır bat dosyası ile çalıştırma:
+### 2. Hazir bat dosyasi ile çaliştirma:
 
 ```bash
 run_voice_assistant.bat
 ```
 
-İlk çalıştırmada, mikrofon seçim menüsü görüntülenecektir:
+İlk çaliştirmada, mikrofon seçim menusu goruntulenecektir:
 
 ```
 Voice Assistant Launcher
 ===================================
 Mikrofon Seçimi
 ===================================
-Lütfen bir seçenek seçin:
-1 - Mikrofonları listele (detaylı liste)
+Lutfen bir seçenek seçin:
+1 - Mikrofonlari listele (detayli liste)
 2 - Belirli bir mikrofon seç
-3 - Varsayılan mikrofon ile başlat
+3 - Varsayilan mikrofon ile başlat
 ```
 
-Eğer birden fazla mikrofonunuz varsa, "1" seçeneği ile mikrofonları listeleyebilir ve ardından "2" seçeneği ile belirli bir mikrofon seçebilirsiniz.
+Eğer birden fazla mikrofonunuz varsa, "1" seçeneği ile mikrofonlari listeleyebilir ve ardindan "2" seçeneği ile belirli bir mikrofon seçebilirsiniz.
 
-## Sesli Asistanı Kullanma
+## Sesli Asistani Kullanma
 
-Asistan başladıktan sonra şu adımları izleyin:
+Asistan başladiktan sonra şu adimlari izleyin:
 
-1. **Asistanı uyandırma:** 
-   - "Jarvis" (veya ayarladığınız uyandırma sözcüğünü) söyleyin
-   - Asistan "Sizi dinliyorum" diyerek yanıt verecektir
+1. **Asistani uyandirma:** 
+   - "Jarvis" (veya ayarladiğiniz uyandirma sozcuğunu) soyleyin
+   - Asistan "Sizi dinliyorum" diyerek yanit verecektir
 
 2. **Komut verme:**
-   - Asistan aktifleştikten sonra, komutunuzu söyleyin (örn. "Chrome aç", "YouTube aç", "sesi artır")
-   - Asistan komutu tanıdığında uygulayacak ve sesli geri bildirim verecektir
+   - Asistan aktifleştikten sonra, komutunuzu soyleyin (orn. "Chrome aç", "YouTube aç", "sesi artir")
+   - Asistan komutu tanidiğinda uygulayacak ve sesli geri bildirim verecektir
 
 3. **Konuşma modu:**
-   - Asistan, varsayılan olarak 60 saniye boyunca aktif kalır ve bu süre içinde uyandırma sözcüğünü tekrar söylemeden komut verebilirsiniz
-   - "Konuşma modunu kapat" diyerek manuel olarak uyandırma sözcüğü moduna dönebilirsiniz
+   - Asistan, varsayilan olarak 60 saniye boyunca aktif kalir ve bu sure içinde uyandirma sozcuğunu tekrar soylemeden komut verebilirsiniz
+   - "Konuşma modunu kapat" diyerek manuel olarak uyandirma sozcuğu moduna donebilirsiniz
 
-4. **Asistanı kapatma:**
-   - "Çık" veya "Kapat" komutlarını söyleyerek asistanı kapatabilirsiniz
-   - Veya komut satırında Ctrl+C tuşlarına basabilirsiniz
+4. **Asistani kapatma:**
+   - "Çik" veya "Kapat" komutlarini soyleyerek asistani kapatabilirsiniz
+   - Veya komut satirinda Ctrl+C tuşlarina basabilirsiniz
 
 ## Komut Kategorileri
 
-Asistan aşağıdaki kategorilerde komutları destekler:
+Asistan aşağidaki kategorilerde komutlari destekler:
 
-### Uygulama Açma Komutları
+### Uygulama Açma Komutlari
 - "Chrome aç", "YouTube aç", "Netflix aç", "Spotify aç"
 - "Not defteri aç", "Hesap makinesi aç", "Dosya gezgini aç"
 - "Word aç", "Excel aç", "PowerPoint aç"
 
-### Sistem Kontrol Komutları
-- "Sesi artır", "Sesi azalt", "Sesi kapat"
-- "Screenshot" (ekran görüntüsü alma)
+### Sistem Kontrol Komutlari
+- "Sesi artir", "Sesi azalt", "Sesi kapat"
+- "Screenshot" (ekran goruntusu alma)
 
-### Medya Kontrol Komutları
+### Medya Kontrol Komutlari
 - "Oynat", "Duraklat", "Durdur"
-- "Sonraki parça", "Önceki parça"
-- "Tam ekran yap", "Tam ekrandan çık"
+- "Sonraki parça", "onceki parça"
+- "Tam ekran yap", "Tam ekrandan çik"
 - "10 saniye ileri sar", "30 saniye geri sar"
 
-### Tarayıcı Kontrol Komutları
-- "Sekme bir", "Sekme iki", "Üçüncü sekme" (1-9 arası sekmeler)
-- "Sonraki sekme", "Önceki sekme"
+### Tarayici Kontrol Komutlari
+- "Sekme bir", "Sekme iki", "uçuncu sekme" (1-9 arasi sekmeler)
+- "Sonraki sekme", "onceki sekme"
 - "Yeni sekme", "Sekmeyi kapat"
-- "Sayfayı yenile", "Tarayıcı geçmişi", "İndirilenler"
+- "Sayfayi yenile", "Tarayici geçmişi", "İndirilenler"
 
-### Web Arama Komutları
+### Web Arama Komutlari
 - "Google'da ara [arama terimi]"
 - "YouTube'da ara [arama terimi]"
 - "Wikipedia'da ara [arama terimi]"
-- "Hava durumu göster", "Haberleri göster"
+- "Hava durumu goster", "Haberleri goster"
 
-### Netflix Özel Komutları
-- "Altyazıları göster/gizle"
-- "Jeneriği atla", "Bölüm atla"
-- "Bölüm bilgilerini göster"
+### Netflix ozel Komutlari
+- "Altyazilari goster/gizle"
+- "Jeneriği atla", "Bolum atla"
+- "Bolum bilgilerini goster"
 
-### Asistan Kontrol Komutları
+### Asistan Kontrol Komutlari
 - "Konuşma modunu kapat"
-- "Yardım", "Komutları göster"
-- "Çık", "Kapat"
+- "Yardim", "Komutlari goster"
+- "Çik", "Kapat"
 
-## Komutları Özelleştirme
+## Komutlari ozelleştirme
 
-Tüm komutlar `komutlar.json` dosyasında tanımlanmıştır. Bu dosyayı düzenleyerek mevcut komutları değiştirebilir veya yeni komutlar ekleyebilirsiniz.
+Tum komutlar `komutlar.json` dosyasinda tanimlanmiştir. Bu dosyayi duzenleyerek mevcut komutlari değiştirebilir veya yeni komutlar ekleyebilirsiniz.
 
-Her komut, kategori altında bir anahtar-değer çifti olarak tanımlanır:
+Her komut, kategori altinda bir anahtar-değer çifti olarak tanimlanir:
 ```json
 "kategori": {
     "komut ifadesi": "eylem"
@@ -172,9 +172,9 @@ Her komut, kategori altında bir anahtar-değer çifti olarak tanımlanır:
 Eylem tipleri:
 - Doğrudan sistem komutu: `"start chrome"`
 - Medya tuşu: `"mediaplaypause"`, `"volumeup"`, `"medianext"`
-- Tuş simülasyonu: `"noop+simulateKey:ctrl+1"`, `"noop+simulateKey:f"`
+- Tuş simulasyonu: `"noop+simulateKey:ctrl+1"`, `"noop+simulateKey:f"`
 
-Örnek: Yeni bir komut eklemek için `komutlar.json` dosyasını açın ve ilgili kategoriye komutunuzu ekleyin:
+ornek: Yeni bir komut eklemek için `komutlar.json` dosyasini açin ve ilgili kategoriye komutunuzu ekleyin:
 ```json
 "uygulamalar": {
     "hesap makinesi aç": "start calc",
@@ -184,53 +184,53 @@ Eylem tipleri:
 
 ## Sorun Giderme
 
-### Asistan çalışmıyor veya "Hata" mesajı veriyor:
-1. Python sürümünüzün 3.10 veya daha yeni olduğundan emin olun
-2. Tüm bağımlılıkların kurulu olduğunu kontrol edin (`install_dependencies.bat` tekrar çalıştırın)
-3. Mikrofonunuzun çalıştığından emin olun
-4. Konsolda görünen hata mesajlarını kontrol edin
+### Asistan çalişmiyor veya "Hata" mesaji veriyor:
+1. Python surumunuzun 3.10 veya daha yeni olduğundan emin olun
+2. Tum bağimliliklarin kurulu olduğunu kontrol edin (`install_dependencies.bat` tekrar çaliştirin)
+3. Mikrofonunuzun çaliştiğindan emin olun
+4. Konsolda gorunen hata mesajlarini kontrol edin
 
-### Asistan uyandırma sözcüğünü algılamıyor:
-1. `.env` dosyasında `SENSITIVITY` değerini artırın (örn. 0.8 gibi)
-2. Farklı bir mikrofonla deneyin
-3. Gürültülü ortamlardan uzaklaşın
+### Asistan uyandirma sozcuğunu algilamiyor:
+1. `.env` dosyasinda `SENSITIVITY` değerini artirin (orn. 0.8 gibi)
+2. Farkli bir mikrofonla deneyin
+3. Gurultulu ortamlardan uzaklaşin
 
-### Asistan komutları algılamıyor veya yanlış algılıyor:
-1. Daha net ve yüksek sesle konuşun
-2. Komutların tam olarak `komutlar.json` dosyasında tanımlandığı şekilde olduğunu kontrol edin
-3. İnternet bağlantınızın olduğundan emin olun (komut tanıma için Google Speech API kullanılıyor)
+### Asistan komutlari algilamiyor veya yanliş algiliyor:
+1. Daha net ve yuksek sesle konuşun
+2. Komutlarin tam olarak `komutlar.json` dosyasinda tanimlandiği şekilde olduğunu kontrol edin
+3. İnternet bağlantinizin olduğundan emin olun (komut tanima için Google Speech API kullaniliyor)
 
-### TTS (metin-konuşma) çalışmıyor:
-1. `.env` dosyasında `TTS_ENGINE=pyttsx3` olarak değiştirip tekrar deneyin
-2. Edge TTS için internet bağlantınızın olduğundan emin olun
+### TTS (metin-konuşma) çalişmiyor:
+1. `.env` dosyasinda `TTS_ENGINE=pyttsx3` olarak değiştirip tekrar deneyin
+2. Edge TTS için internet bağlantinizin olduğundan emin olun
 
-## İleri Seviye Özellikler
+## İleri Seviye ozellikler
 
-### Bağlam Farkındalığı
-Asistan, son komutları ve hangi uygulamanın aktif olduğunu hatırlayarak daha doğal etkileşimler sağlar. Örneğin, bir film izlerken "tam ekran yap" ve "tam ekrandan çık" komutları akıllıca işlenir.
+### Bağlam Farkindaliği
+Asistan, son komutlari ve hangi uygulamanin aktif olduğunu hatirlayarak daha doğal etkileşimler sağlar. orneğin, bir film izlerken "tam ekran yap" ve "tam ekrandan çik" komutlari akillica işlenir.
 
-### Özel Tuş Kombinasyonları
-Karmaşık tuş kombinasyonlarını "noop+simulateKey:" önekiyle tanımlayabilirsiniz:
+### ozel Tuş Kombinasyonlari
+Karmaşik tuş kombinasyonlarini "noop+simulateKey:" onekiyle tanimlayabilirsiniz:
 ```json
 "komudum": "noop+simulateKey:ctrl+shift+t"
 ```
 
 ### Doğal Dil İşleme
-Asistan, tam eşleşme yerine benzer komutları tanıyabilecek ve bağlamsal ipuçlarını kullanabilecek şekilde tasarlanmıştır. Bu sayede doğal konuşma ile etkileşime geçebilirsiniz.
+Asistan, tam eşleşme yerine benzer komutlari taniyabilecek ve bağlamsal ipuçlarini kullanabilecek şekilde tasarlanmiştir. Bu sayede doğal konuşma ile etkileşime geçebilirsiniz.
 
 ## Teknik Detaylar
 
-- **Uyandırma Sözcüğü Algılama**: Picovoice Porcupine kütüphanesi
-- **Konuşma Tanıma**: Google Speech Recognition API
+- **Uyandirma Sozcuğu Algilama**: Picovoice Porcupine kutuphanesi
+- **Konuşma Tanima**: Google Speech Recognition API
 - **Metin-Konuşma**: Edge TTS veya pyttsx3
-- **Tuş Simülasyonu**: Windows API (ctypes ve win32api)
-- **Komut Yürütme**: Subprocess ve bağlam farkındalığı ile geliştirilmiş komut yürütücü
-- **Konfigürasyon**: Python-dotenv ile .env dosyasından
+- **Tuş Simulasyonu**: Windows API (ctypes ve win32api)
+- **Komut Yurutme**: Subprocess ve bağlam farkindaliği ile geliştirilmiş komut yurutucu
+- **Konfigurasyon**: Python-dotenv ile .env dosyasindan
 
-## Lisans ve Katkıda Bulunma
+## Lisans ve Katkida Bulunma
 
-Bu proje açık kaynaklıdır. Hata raporları, özellik istekleri ve katkılar memnuniyetle karşılanır.
+Bu proje açik kaynaklidir. Hata raporlari, ozellik istekleri ve katkilar memnuniyetle karşilanir.
 
 ---
 
-Sesli asistanınızı keyifle kullanın! Herhangi bir sorunuz veya geri bildiriminiz varsa, lütfen GitHub üzerinden iletişime geçin.
+Sesli asistaninizi keyifle kullanin! Herhangi bir sorunuz veya geri bildiriminiz varsa, lutfen GitHub uzerinden iletişime geçin.

@@ -10,8 +10,8 @@ def check_python_version():
     current_version = sys.version_info[:2]
     
     if current_version < required_version:
-        print(f"Hata: Python {required_version[0]}.{required_version[1]} veya üstü gerekli.")
-        print(f"Şu anda kullanılan sürüm: Python {current_version[0]}.{current_version[1]}")
+        print(f"Hata: Python {required_version[0]}.{required_version[1]} veya ustu gerekli.")
+        print(f"Şu anda kullanilan surum: Python {current_version[0]}.{current_version[1]}")
         return False
         
     return True
@@ -19,12 +19,12 @@ def check_python_version():
 def install_requirements():
     """Install required packages"""
     try:
-        print("Gerekli paketler yükleniyor...")
+        print("Gerekli paketler yukleniyor...")
         subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
-        print("Paketler başarıyla yüklendi.")
+        print("Paketler başariyla yuklendi.")
         return True
     except subprocess.CalledProcessError as e:
-        print(f"Hata: Paketler yüklenirken bir sorun oluştu - {e}")
+        print(f"Hata: Paketler yuklenirken bir sorun oluştu - {e}")
         return False
     except Exception as e:
         print(f"Beklenmeyen hata: {e}")
@@ -35,8 +35,8 @@ def check_os_compatibility():
     os_name = platform.system()
     
     if os_name != "Windows":
-        print(f"Uyarı: Bu uygulama Windows için tasarlanmıştır, ancak şu an {os_name} üzerinde çalıştırılıyor.")
-        print("Bazı özellikler düzgün çalışmayabilir.")
+        print(f"Uyari: Bu uygulama Windows için tasarlanmiştir, ancak şu an {os_name} uzerinde çaliştiriliyor.")
+        print("Bazi özellikler duzgun çalişmayabilir.")
         return False
         
     return True
@@ -49,18 +49,18 @@ def check_microphone_access():
         input_devices = [d for d in devices if d['max_input_channels'] > 0]
         
         if not input_devices:
-            print("Uyarı: Kullanılabilir mikrofon bulunamadı.")
+            print("Uyari: Kullanilabilir mikrofon bulunamadi.")
             return False
             
         print(f"{len(input_devices)} adet mikrofon bulundu.")
         return True
     except:
-        print("Uyarı: Mikrofonlar kontrol edilirken bir sorun oluştu.")
+        print("Uyari: Mikrofonlar kontrol edilirken bir sorun oluştu.")
         return False
 
 def setup():
     """Run the setup process"""
-    print("Kişisel Sesli Asistan Kurulum Aracı")
+    print("Kişisel Sesli Asistan Kurulum Araci")
     print("=" * 40)
     
     if not check_python_version():
@@ -82,8 +82,8 @@ def setup():
     # Check microphone access
     check_microphone_access()
     
-    print("\nKurulum tamamlandı!")
-    print("Uygulamayı başlatmak için: python main.py")
+    print("\nKurulum tamamlandi!")
+    print("Uygulamayi başlatmak için: python main.py")
     
     return True
 

@@ -57,8 +57,8 @@ class VoiceAssistant:
             try:
                 engine = get_tts_engine()
                 if engine:
-                    print("Sesli geri bildirim sistemi hazır.")
-                    speak_text("Sesli asistan başlatılıyor", async_mode=False)
+                    print("Sesli geri bildirim sistemi hazir.")
+                    speak_text("Sesli asistan başlatiliyor", async_mode=False)
             except Exception as e:
                 print(f"TTS initialization error: {e}")
                 
@@ -69,7 +69,7 @@ class VoiceAssistant:
             self.wake_detector.stop()
         
         # Visual feedback
-        print("Dinleme başlatılıyor...")
+        print("Dinleme başlatiliyor...")
         
         # Create custom greeting message - SADECE BİR KEZ
         if not self.conversation_active:
@@ -110,12 +110,12 @@ class VoiceAssistant:
                 
                 # Display time at intervals
                 if remaining in [45, 30, 15, 10, 5]:
-                    print(f"Konuşma modu: {remaining} saniye kaldı")
+                    print(f"Konuşma modu: {remaining} saniye kaldi")
                 
                 # Check if timer expired
                 if remaining <= 0:
-                    print("\nKonuşma süresi doldu. Wake word moduna geçiliyor...")
-                    speak_text("Konuşma modu kapatılıyor")
+                    print("\nKonuşma suresi doldu. Wake word moduna geçiliyor...")
+                    speak_text("Konuşma modu kapatiliyor")
                     self._conversation_timeout()
                     break
                     
@@ -136,47 +136,47 @@ class VoiceAssistant:
         self.timer_running = False
         
         # Konuşma modunun bittiğini bildir
-        print("\nKonuşma süresi doldu. Wake word moduna geçiliyor...")
-        speak_text("Konuşma modu kapatılıyor")
+        print("\nKonuşma suresi doldu. Wake word moduna geçiliyor...")
+        speak_text("Konuşma modu kapatiliyor")
         
         # Stop command listener if active
         if self.command_listener and self.command_listener.is_listening:
             self.command_listener.stop_listening()
-            time.sleep(0.5)  # Dinleyici kapanması için bekle
+            time.sleep(0.5)  # Dinleyici kapanmasi için bekle
         
-        # Wake word dedektörünü durdur ve tekrar başlat (sıfırlama için)
+        # Wake word dedektörunu durdur ve tekrar başlat (sifirlama için)
         if self.wake_detector:
             # Önce tamamen kapat
             if hasattr(self.wake_detector, 'running') and self.wake_detector.running:
                 self.wake_detector.stop()
-                time.sleep(1)  # Dedektörün tamamen durması için bekle
+                time.sleep(1)  # Dedektörun tamamen durmasi için bekle
                 
             # Sonra tekrar başlat
             if self.running:
                 self.wake_detector.start()
                 
-                # Asistanın hazır olduğunu bildir
-                print("\n========== Asistan Hazır ==========")
-                print(f">> '{self.wake_word}' diyerek asistanı aktifleştirebilirsiniz.")
+                # Asistanin hazir olduğunu bildir
+                print("\n========== Asistan Hazir ==========")
+                print(f">> '{self.wake_word}' diyerek asistani aktifleştirebilirsiniz.")
     
     def _start_command_listener(self):
         """Start the command listener"""
         # Mevcut dinleyiciyi durdur
         if self.command_listener and self.command_listener.is_listening:
             self.command_listener.stop_listening()
-            time.sleep(0.5)  # Bekle ve mevcut işlemin durmasını sağla
+            time.sleep(0.5)  # Bekle ve mevcut işlemin durmasini sağla
         
-        # Command listener'ı sıfırla, yeni bir tane oluştur
+        # Command listener'i sifirla, yeni bir tane oluştur
         from command_listener import CommandListener
         self.command_listener = CommandListener(self._on_command_detected, microphone_index=self.microphone_index)
         
-        print("Konuşma modu aktif! Komutlarınızı söyleyebilirsiniz...")
+        print("Konuşma modu aktif! Komutlarinizi söyleyebilirsiniz...")
         self.command_listener.start_listening()
     
     def _restart_command_listener(self):
         """Restart command listener with a small delay"""
         # Daha uzun bekle
-        time.sleep(0.5)  # Önceki komutun tamamen işlenmesi için daha kısa bekle
+        time.sleep(0.5)  # Önceki komutun tamamen işlenmesi için daha kisa bekle
         
         if self.conversation_active:
             # Arka arkaya konuşma sorunu için sadece bir kez 'sizi dinliyorum' de
@@ -191,7 +191,7 @@ class VoiceAssistant:
         
         # Detected command
         detected_command = text.strip()
-        print(f"Algılanan komut: '{detected_command}'")
+        print(f"Algilanan komut: '{detected_command}'")
         
         # Create a new thread for processing the command
         def process_command():
@@ -200,7 +200,7 @@ class VoiceAssistant:
                 self.command_listener.stop_listening()
             
             try:
-                # Daha doğal bir yanıt ver - rastgele onaylama kalıbı söyle (sadece bir kez)
+                # Daha doğal bir yanit ver - rastgele onaylama kalibi söyle (sadece bir kez)
                 speak_text(acknowledge())
                 
                 if self.debug_mode:
@@ -218,44 +218,44 @@ class VoiceAssistant:
                 
                 # If a command was found and executed
                 if category and cmd_key:
-                    print(f"Komut başarıyla çalıştırıldı: {cmd_key}")
+                    print(f"Komut başariyla çaliştirildi: {cmd_key}")
                     
                     # Check if the command is to exit conversation mode
                     if category == "asistan" and "konuşma modu" in cmd_key:
-                        speak_text("Konuşma modu kapatılıyor. Wake word bekleniyor...")
-                        print("Konuşma modu kapatılıyor. Wake word bekleniyor...")
+                        speak_text("Konuşma modu kapatiliyor. Wake word bekleniyor...")
+                        print("Konuşma modu kapatiliyor. Wake word bekleniyor...")
                         self.conversation_active = False
                         self.timer_running = False
                         
                         # Stop command listener if active
                         if self.command_listener and self.command_listener.is_listening:
                             self.command_listener.stop_listening()
-                            time.sleep(0.5)  # Dinleyici kapanması için bekle
+                            time.sleep(0.5)  # Dinleyici kapanmasi için bekle
                         
-                        # Wake word dedektörünü durdur ve tekrar başlat (sıfırlama için)
+                        # Wake word dedektörunu durdur ve tekrar başlat (sifirlama için)
                         if self.wake_detector:
                             # Önce tamamen kapat
                             if hasattr(self.wake_detector, 'running') and self.wake_detector.running:
                                 self.wake_detector.stop()
-                                time.sleep(1)  # Dedektörün tamamen durması için bekle
+                                time.sleep(1)  # Dedektörun tamamen durmasi için bekle
                                 
                             # Sonra tekrar başlat
                             if self.running:
                                 self.wake_detector.start()
                                 
-                                # Asistanın hazır olduğunu bildir
-                                print("\n========== Asistan Hazır ==========")
-                                print(f">> '{self.wake_word}' diyerek asistanı aktifleştirebilirsiniz.")
+                                # Asistanin hazir olduğunu bildir
+                                print("\n========== Asistan Hazir ==========")
+                                print(f">> '{self.wake_word}' diyerek asistani aktifleştirebilirsiniz.")
                         return
                     
-                    # Çok kısa bir bekleme - daha hızlı yanıt için
+                    # Çok kisa bir bekleme - daha hizli yanit için
                     if category == "medya":
-                        time.sleep(0.3)  # Medya komutları için kısa bekle
+                        time.sleep(0.3)  # Medya komutlari için kisa bekle
                     elif category == "chrome":
                         # Chrome sekme geçişleri için biraz daha uzun bekle
-                        # Bu sayede sekme değiştirdikten sonra komutlar çalışacak
+                        # Bu sayede sekme değiştirdikten sonra komutlar çalişacak
                         time.sleep(1.0)  # Sekme geçişleri için daha uzun bekleme
-                        print("Sekme değiştirildi, hazırlanıyor...")
+                        print("Sekme değiştirildi, hazirlaniyor...")
                 
                 # Reset timer and restart command listener
                 if self.conversation_active:
@@ -270,7 +270,7 @@ class VoiceAssistant:
                 if self.conversation_active:
                     self._restart_command_listener()
         
-        # Thread çalıştır
+        # Thread çaliştir
         command_thread = threading.Thread(target=process_command)
         command_thread.daemon = True
         command_thread.start()
@@ -299,7 +299,7 @@ class VoiceAssistant:
             )
             
             # Create icon
-            self.icon = pystray.Icon("voice_assistant", icon_image, "Ses Asistanı", menu)
+            self.icon = pystray.Icon("voice_assistant", icon_image, "Ses Asistani", menu)
             
             # Run icon in a separate thread
             self.icon_thread = threading.Thread(target=self.icon.run)
@@ -336,34 +336,34 @@ class VoiceAssistant:
         print("============================================================")
         print("Kişisel Sesli Asistan - Uzaktan Kontrol Versiyonu")
         print("============================================================")
-        print(f"Mikrofonunuz: {'Varsayılan' if self.microphone_index is None else f'Index {self.microphone_index}'}")
-        print(f"1. Asistanı aktifleştirmek için '{self.wake_word}' deyin (büyük/küçük harf önemli değil)")
-        print(f"2. Komutlarınızı söyleyin. Aktif dinleme süresi: {self.conversation_timeout} saniye")
-        print("   Bazı örnek komutlar:")
+        print(f"Mikrofonunuz: {'Varsayilan' if self.microphone_index is None else f'Index {self.microphone_index}'}")
+        print(f"1. Asistani aktifleştirmek için '{self.wake_word}' deyin (buyuk/kuçuk harf önemli değil)")
+        print(f"2. Komutlarinizi söyleyin. Aktif dinleme suresi: {self.conversation_timeout} saniye")
+        print("   Bazi örnek komutlar:")
         print("   - Chrome aç")
         print("   - YouTube aç")
-        print("   - Ses seviyesini artır")
-        print("   - Müziği durdur/başlat")
+        print("   - Ses seviyesini artir")
+        print("   - Muziği durdur/başlat")
         print("   - Netflix'te diziyi durdur")
         print("   - 10 saniye ileri sar")
-        print("   - Altyazıları göster")
-        print("3. Her komuttan sonra 60 saniyelik süre yeniden başlar")
-        print("4. Konuşma modundan çıkmak için 'konuşma modunu kapat' deyin")
-        print("5. Uygulamadan çıkmak için 'çık' veya 'kapat' deyin")
+        print("   - Altyazilari göster")
+        print("3. Her komuttan sonra 60 saniyelik sure yeniden başlar")
+        print("4. Konuşma modundan çikmak için 'konuşma modunu kapat' deyin")
+        print("5. Uygulamadan çikmak için 'çik' veya 'kapat' deyin")
         print()
         
-        print("Sesli asistan başlatılıyor...")
+        print("Sesli asistan başlatiliyor...")
         
         # Ses sistemini test et
         if self.voice_feedback:
             print("TTS sistemini test ediyorum...")
             try:
-                speak_text("Merhaba, Komutlarınızı dinlemeye hazırım.", async_mode=False)
+                speak_text("Merhaba, Komutlarinizi dinlemeye hazirim.", async_mode=False)
                 time.sleep(1)
-                print("TTS sistemi çalışıyor.")
+                print("TTS sistemi çalişiyor.")
             except Exception as e:
                 print(f"TTS sistemi test edilirken hata: {e}")
-                print("TTS sistemi devre dışı bırakılıyor...")
+                print("TTS sistemi devre dişi birakiliyor...")
                 self.voice_feedback = False
         
         # Initialize command executor
@@ -384,15 +384,15 @@ class VoiceAssistant:
         
         # Wait for exit request
         try:
-            print("\n========== Asistan Hazır ==========")
-            print(f">> '{self.wake_word}' diyerek asistanı aktifleştirebilirsiniz.")
-            print(">> Çıkmak için Ctrl+C tuşlarına basın.\n")
+            print("\n========== Asistan Hazir ==========")
+            print(f">> '{self.wake_word}' diyerek asistani aktifleştirebilirsiniz.")
+            print(">> Çikmak için Ctrl+C tuşlarina basin.\n")
             
             while not self.exit_requested:
                 time.sleep(0.1)
                 
         except KeyboardInterrupt:
-            print("\nKullanıcı tarafından kapatılıyor...")
+            print("\nKullanici tarafindan kapatiliyor...")
         finally:
             self.stop()
             
@@ -422,7 +422,7 @@ class VoiceAssistant:
                 pass
             
         print("Sesli asistan durduruldu")
-        speak_text("Sesli asistan kapatılıyor", async_mode=False)
+        speak_text("Sesli asistan kapatiliyor", async_mode=False)
         
         # Clean up TTS resources
         shutdown_tts()
@@ -439,7 +439,7 @@ if __name__ == "__main__":
     if "--list-mics" in sys.argv:
         try:
             import speech_recognition as sr
-            print("\nKullanılabilir Mikrofonlar:")
+            print("\nKullanilabilir Mikrofonlar:")
             for idx, name in enumerate(sr.Microphone.list_microphone_names()):
                 print(f"{idx}: {name}")
             sys.exit(0)

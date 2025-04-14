@@ -1,18 +1,18 @@
-# Temel bağımlılıklar
+# Temel bağimliliklar
 SpeechRecognition>=3.9.0
 python-dotenv>=0.21.0
 pyaudio>=0.2.13
 numpy>=1.23.4
 tqdm>=4.66.1
 
-# Ses tanıma bağımlılıkları
+# Ses tanima bağimliliklari
 vosk>=0.3.45
 sounddevice>=0.4.6
 
-# Wake word tanıma
+# Wake word tanima
 pvporcupine>=3.0.0
 
-# Sesli sentez bağımlılıkları
+# Sesli sentez bağimliliklari
 pyttsx3>=2.90
 edge-tts>=7.0.0
 pygame>=2.6.1
@@ -22,10 +22,10 @@ pystray>=0.19.4
 pillow>=10.0.0
 PyQt5>=5.15.9
 
-# Windows için özel bağımlılıklar
+# Windows için ozel bağimliliklar
 pywin32>=306; platform_system == "Windows"
 
-# Altyazı desteği
+# Altyazi desteği
 srt>=3.5.2
 
 # Ses dosya işleme

@@ -1,6 +1,6 @@
 """
 Voce Sesli Asistan - Ana Pencere
-GUI arayüzü için ana pencere bileşeni.
+GUI arayuzu için ana pencere bileşeni.
 """
 
 import os
@@ -19,24 +19,24 @@ from utils.config_manager import ConfigManager
 logger = logging.getLogger(__name__)
 
 class MainWindow(QMainWindow):
-    """Sesli asistan için ana pencere sınıfı"""
+    """Sesli asistan için ana pencere sinifi"""
     
     def __init__(self, parent=None):
         super().__init__(parent)
         self.config_manager = ConfigManager()
         self.controller = AssistantController(self.config_manager)
         
-        # Ana pencere ayarları
-        self.setWindowTitle("Voce - Türkçe Sesli Asistan")
+        # Ana pencere ayarlari
+        self.setWindowTitle("Voce - Turkçe Sesli Asistan")
         self.setMinimumSize(800, 600)
         
         # UI bileşenlerini oluştur
         self.init_ui()
         
-        # Kontrol bağlantılarını kur
+        # Kontrol bağlantilarini kur
         self.connect_signals()
         
-        # Config'ten ayarları yükle
+        # Config'ten ayarlari yukle
         self.load_settings()
     
     def init_ui(self):
@@ -54,7 +54,7 @@ class MainWindow(QMainWindow):
         control_tab = QWidget()
         control_layout = QVBoxLayout(control_tab)
         
-        # Başlık ve logo (eğer varsa)
+        # Başlik ve logo (eğer varsa)
         title_layout = QHBoxLayout()
         
         logo_file = os.path.join("resources", "logo.png")
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
                 64, 64, Qt.KeepAspectRatio, Qt.SmoothTransformation))
             title_layout.addWidget(logo_label)
         
-        title_label = QLabel("Voce Türkçe Sesli Asistan")
+        title_label = QLabel("Voce Turkçe Sesli Asistan")
         title_label.setFont(QFont("Arial", 18, QFont.Bold))
         title_layout.addWidget(title_label)
         title_layout.addStretch()
@@ -75,15 +75,15 @@ class MainWindow(QMainWindow):
         status_group = QGroupBox("Asistan Durumu")
         status_layout = QVBoxLayout(status_group)
         
-        self.status_label = QLabel("Hazır")
+        self.status_label = QLabel("Hazir")
         self.status_label.setFont(QFont("Arial", 12))
         self.status_label.setAlignment(Qt.AlignCenter)
         status_layout.addWidget(self.status_label)
         
         control_layout.addWidget(status_group)
         
-        # Komut kontrolü grupı
-        command_group = QGroupBox("Asistan Kontrolü")
+        # Komut kontrolu grupi
+        command_group = QGroupBox("Asistan Kontrolu")
         command_layout = QHBoxLayout(command_group)
         
         self.start_button = QPushButton("Başlat")
@@ -104,15 +104,15 @@ class MainWindow(QMainWindow):
         
         control_layout.addWidget(command_group)
         
-        # Hızlı Komutlar
-        commands_group = QGroupBox("Hızlı Komutlar")
+        # Hizli Komutlar
+        commands_group = QGroupBox("Hizli Komutlar")
         commands_layout = QVBoxLayout(commands_group)
         
         self.command_examples = [
             "Saat kaç", 
-            "Bugün hava nasıl", 
-            "Tarayıcıyı aç", 
-            "Müziği çal",
+            "Bugun hava nasil", 
+            "Tarayiciyi aç", 
+            "Muziği çal",
             "Sesli oku"
         ]
         
@@ -133,9 +133,9 @@ class MainWindow(QMainWindow):
         general_group = QGroupBox("Genel Ayarlar")
         general_layout = QFormLayout(general_group)
         
-        # Uyandırma kelimesi
+        # Uyandirma kelimesi
         self.wake_word_input = QLineEdit()
-        general_layout.addRow("Uyandırma Kelimesi:", self.wake_word_input)
+        general_layout.addRow("Uyandirma Kelimesi:", self.wake_word_input)
         
         # Debug modu
         self.debug_checkbox = QCheckBox("Debug Modu")
@@ -147,8 +147,8 @@ class MainWindow(QMainWindow):
         
         settings_layout.addWidget(general_group)
         
-        # TTS ayarları grubu
-        tts_group = QGroupBox("Ses Sentezi Ayarları")
+        # TTS ayarlari grubu
+        tts_group = QGroupBox("Ses Sentezi Ayarlari")
         tts_layout = QFormLayout(tts_group)
         
         # TTS motoru
@@ -160,7 +160,7 @@ class MainWindow(QMainWindow):
         self.voice_combo = QComboBox()
         tts_layout.addRow("Ses:", self.voice_combo)
         
-        # Hız
+        # Hiz
         self.rate_slider = QSlider(Qt.Horizontal)
         self.rate_slider.setRange(50, 200)
         self.rate_slider.setValue(100)
@@ -168,9 +168,9 @@ class MainWindow(QMainWindow):
         rate_layout = QHBoxLayout()
         rate_layout.addWidget(self.rate_slider)
         rate_layout.addWidget(self.rate_value_label)
-        tts_layout.addRow("Konuşma Hızı:", rate_layout)
+        tts_layout.addRow("Konuşma Hizi:", rate_layout)
         
-        # Ses yüksekliği
+        # Ses yuksekliği
         self.volume_slider = QSlider(Qt.Horizontal)
         self.volume_slider.setRange(0, 100)
         self.volume_slider.setValue(75)
@@ -187,7 +187,7 @@ class MainWindow(QMainWindow):
         save_layout = QHBoxLayout()
         save_layout.addStretch()
         
-        self.save_button = QPushButton("Ayarları Kaydet")
+        self.save_button = QPushButton("Ayarlari Kaydet")
         self.save_button.setMinimumSize(150, 40)
         self.save_button.setFont(QFont("Arial", 12))
         save_layout.addWidget(self.save_button)
@@ -199,11 +199,11 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(settings_tab, "Ayarlar")
         
         # Durum çubuğu
-        self.statusBar().showMessage("Hazır")
+        self.statusBar().showMessage("Hazir")
     
     def connect_signals(self):
-        """Sinyal bağlantılarını kurar"""
-        # Buton bağlantıları
+        """Sinyal bağlantilarini kurar"""
+        # Buton bağlantilari
         self.start_button.clicked.connect(self.start_assistant)
         self.stop_button.clicked.connect(self.stop_assistant)
         self.test_button.clicked.connect(self.test_tts)
@@ -218,14 +218,14 @@ class MainWindow(QMainWindow):
         self.controller.status_changed.connect(self.update_status)
     
     def load_settings(self):
-        """Config'ten ayarları yükler"""
+        """Config'ten ayarlari yukler"""
         try:
             # Genel ayarlar
             self.wake_word_input.setText(self.config_manager.get('WAKE_WORD', 'hey asistan'))
             self.debug_checkbox.setChecked(self.config_manager.get('DEBUG_MODE', 'false').lower() == 'true')
             self.voice_feedback_checkbox.setChecked(self.config_manager.get('VOICE_FEEDBACK', 'true').lower() == 'true')
             
-            # TTS ayarları
+            # TTS ayarlari
             tts_engine = self.config_manager.get('TTS_ENGINE', 'edge-tts')
             self.tts_engine_combo.setCurrentIndex(0 if tts_engine.lower() == 'edge-tts' else 1)
             
@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
             self.rate_slider.setValue(int(float(self.config_manager.get('TTS_RATE', '100'))))
             self.volume_slider.setValue(int(float(self.config_manager.get('TTS_VOLUME', '75'))))
             
-            # Ses seçeneklerini güncelle
+            # Ses seçeneklerini guncelle
             self.update_voice_options()
             
             # Seçili ses
@@ -244,89 +244,89 @@ class MainWindow(QMainWindow):
                     self.voice_combo.setCurrentIndex(index)
             
         except Exception as e:
-            logger.error(f"Ayarlar yüklenirken hata: {e}")
-            QMessageBox.warning(self, "Ayarlar Hatası", 
-                               f"Ayarlar yüklenirken bir hata oluştu: {e}")
+            logger.error(f"Ayarlar yuklenirken hata: {e}")
+            QMessageBox.warning(self, "Ayarlar Hatasi", 
+                               f"Ayarlar yuklenirken bir hata oluştu: {e}")
     
     def update_voice_options(self):
-        """Seçili TTS motoru için ses seçeneklerini günceller"""
+        """Seçili TTS motoru için ses seçeneklerini gunceller"""
         self.voice_combo.clear()
         
         if self.tts_engine_combo.currentIndex() == 0:  # Edge TTS
             try:
-                # Edge TTS sesleri (anlık olarak alamıyoruz, ama statik olarak ekleyebiliriz)
-                turkish_voices = ["tr-TR-AhmetNeural (Erkek)", "tr-TR-EmelNeural (Kadın)"]
+                # Edge TTS sesleri (anlik olarak alamiyoruz, ama statik olarak ekleyebiliriz)
+                turkish_voices = ["tr-TR-AhmetNeural (Erkek)", "tr-TR-EmelNeural (Kadin)"]
                 self.voice_combo.addItems(turkish_voices)
             except Exception as e:
-                logger.error(f"Edge TTS sesleri alınırken hata: {e}")
-                self.voice_combo.addItem("Varsayılan")
+                logger.error(f"Edge TTS sesleri alinirken hata: {e}")
+                self.voice_combo.addItem("Varsayilan")
         else:  # pyttsx3
             try:
-                self.voice_combo.addItem("Varsayılan")
-                # Burada pyttsx3 seslerini listeleyebilirsiniz, ancak şu an için sadece varsayılan
-                # ses ekleniyor çünkü pyttsx3 seslerine erişim biraz karmaşık
+                self.voice_combo.addItem("Varsayilan")
+                # Burada pyttsx3 seslerini listeleyebilirsiniz, ancak şu an için sadece varsayilan
+                # ses ekleniyor çunku pyttsx3 seslerine erişim biraz karmaşik
             except Exception as e:
-                logger.error(f"pyttsx3 sesleri alınırken hata: {e}")
-                self.voice_combo.addItem("Varsayılan")
+                logger.error(f"pyttsx3 sesleri alinirken hata: {e}")
+                self.voice_combo.addItem("Varsayilan")
     
     def update_rate_label(self, value):
-        """Konuşma hızı etiketini günceller"""
+        """Konuşma hizi etiketini gunceller"""
         self.rate_value_label.setText(f"{value}%")
     
     def update_volume_label(self, value):
-        """Ses seviyesi etiketini günceller"""
+        """Ses seviyesi etiketini gunceller"""
         self.volume_value_label.setText(f"{value}%")
     
     def save_settings(self):
-        """Ayarları kaydeder"""
+        """Ayarlari kaydeder"""
         try:
             # Genel ayarlar
             self.config_manager.set('WAKE_WORD', self.wake_word_input.text())
             self.config_manager.set('DEBUG_MODE', str(self.debug_checkbox.isChecked()).lower())
             self.config_manager.set('VOICE_FEEDBACK', str(self.voice_feedback_checkbox.isChecked()).lower())
             
-            # TTS ayarları
+            # TTS ayarlari
             tts_engine = "edge-tts" if self.tts_engine_combo.currentIndex() == 0 else "pyttsx3"
             self.config_manager.set('TTS_ENGINE', tts_engine)
             
             # Ses seçimi
             voice_text = self.voice_combo.currentText()
             if '(' in voice_text:
-                voice_text = voice_text.split('(')[0].strip()  # Sadece ses adını al, açıklamayı çıkar
+                voice_text = voice_text.split('(')[0].strip()  # Sadece ses adini al, açiklamayi çikar
             self.config_manager.set('TTS_VOICE', voice_text)
             
-            # Hız ve ses seviyesi
+            # Hiz ve ses seviyesi
             self.config_manager.set('TTS_RATE', str(self.rate_slider.value()))
             self.config_manager.set('TTS_VOLUME', str(self.volume_slider.value()))
             
-            # Ayarları kaydet
+            # Ayarlari kaydet
             self.config_manager.save_config()
             
-            # Controller'a bildirmek için ayarları yeniden yükle
+            # Controller'a bildirmek için ayarlari yeniden yukle
             self.controller.reload_config()
             
-            QMessageBox.information(self, "Ayarlar", "Ayarlar başarıyla kaydedildi.")
+            QMessageBox.information(self, "Ayarlar", "Ayarlar başariyla kaydedildi.")
             
         except Exception as e:
             logger.error(f"Ayarlar kaydedilirken hata: {e}")
-            QMessageBox.warning(self, "Ayarlar Hatası", 
+            QMessageBox.warning(self, "Ayarlar Hatasi", 
                                f"Ayarlar kaydedilirken bir hata oluştu: {e}")
     
     def start_assistant(self):
-        """Asistanı başlatır"""
+        """Asistani başlatir"""
         try:
             self.controller.start()
             self.start_button.setEnabled(False)
             self.stop_button.setEnabled(True)
             self.test_button.setEnabled(False)
-            self.tabs.setTabEnabled(1, False)  # Ayarlar sekmesini devre dışı bırak
+            self.tabs.setTabEnabled(1, False)  # Ayarlar sekmesini devre dişi birak
         except Exception as e:
-            logger.error(f"Asistan başlatılırken hata: {e}")
-            QMessageBox.critical(self, "Başlatma Hatası", 
-                                f"Asistan başlatılırken bir hata oluştu: {e}")
+            logger.error(f"Asistan başlatilirken hata: {e}")
+            QMessageBox.critical(self, "Başlatma Hatasi", 
+                                f"Asistan başlatilirken bir hata oluştu: {e}")
     
     def stop_assistant(self):
-        """Asistanı durdurur"""
+        """Asistani durdurur"""
         try:
             self.controller.stop()
             self.start_button.setEnabled(True)
@@ -335,30 +335,30 @@ class MainWindow(QMainWindow):
             self.tabs.setTabEnabled(1, True)  # Ayarlar sekmesini etkinleştir
         except Exception as e:
             logger.error(f"Asistan durdurulurken hata: {e}")
-            QMessageBox.critical(self, "Durdurma Hatası", 
+            QMessageBox.critical(self, "Durdurma Hatasi", 
                                 f"Asistan durdurulurken bir hata oluştu: {e}")
     
     def test_tts(self):
         """TTS test fonksiyonu"""
         try:
-            self.controller.test_speech("Merhaba! Ben Voce Türkçe Sesli Asistan. Şu anda sesli sentez testi yapıyorum.")
+            self.controller.test_speech("Merhaba! Ben Voce Turkçe Sesli Asistan. Şu anda sesli sentez testi yapiyorum.")
         except Exception as e:
-            logger.error(f"Ses testi sırasında hata: {e}")
-            QMessageBox.warning(self, "Ses Testi Hatası", 
-                               f"Ses testi sırasında bir hata oluştu: {e}")
+            logger.error(f"Ses testi sirasinda hata: {e}")
+            QMessageBox.warning(self, "Ses Testi Hatasi", 
+                               f"Ses testi sirasinda bir hata oluştu: {e}")
     
     def update_status(self, status):
-        """Asistan durumunu günceller"""
+        """Asistan durumunu gunceller"""
         self.status_label.setText(status)
         self.statusBar().showMessage(status)
     
     def closeEvent(self, event):
-        """Uygulama kapatıldığında çağrılır"""
+        """Uygulama kapatildiğinda çağrilir"""
         try:
-            # Asistanı düzgün şekilde kapatalım
+            # Asistani duzgun şekilde kapatalim
             if self.controller.is_running:
-                reply = QMessageBox.question(self, 'Çıkış', 
-                                           "Asistan çalışıyor. Kapatmak istediğinize emin misiniz?",
+                reply = QMessageBox.question(self, 'Çikiş', 
+                                           "Asistan çalişiyor. Kapatmak istediğinize emin misiniz?",
                                            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
                 
                 if reply == QMessageBox.Yes:
@@ -370,14 +370,14 @@ class MainWindow(QMainWindow):
             self.controller.shutdown()
             event.accept()
         except Exception as e:
-            logger.error(f"Uygulama kapatılırken hata: {e}")
-            event.accept()  # Yine de kapatalım
+            logger.error(f"Uygulama kapatilirken hata: {e}")
+            event.accept()  # Yine de kapatalim
 
 def main():
-    """Ana uygulama başlatıcı fonksiyonu"""
+    """Ana uygulama başlatici fonksiyonu"""
     app = QApplication(sys.argv)
     
-    # Stil ayarları
+    # Stil ayarlari
     app.setStyle("Fusion")
     
     # Ana pencereyi oluştur ve göster

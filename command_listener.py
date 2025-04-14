@@ -9,8 +9,8 @@ try:
     HAS_SPEECH_RECOGNITION = True
 except ImportError as e:
     print(f"Error importing speech_recognition: {e}")
-    print("\nÖNEMLİ: Ses tanıma modülünü yüklemek için lütfen:")
-    print("install_dependencies.bat dosyasını tekrar çalıştırın.\n")
+    print("\nÖNEMLİ: Ses tanima modulunu yuklemek için lutfen:")
+    print("install_dependencies.bat dosyasini tekrar çaliştirin.\n")
     HAS_SPEECH_RECOGNITION = False
 
 from dotenv import load_dotenv
@@ -98,11 +98,11 @@ class CommandListener:
             
         self.is_listening = False
         
-        # Thread'in durmasını bekle
+        # Thread'in durmasini bekle
         if self.thread and self.thread.is_alive():
             self.thread.join(1.0)  # En fazla 1 saniye bekle
             
-        # Thread'i sıfırla
+        # Thread'i sifirla
         self.thread = None
         
         if self.debug_mode:
@@ -131,7 +131,7 @@ class CommandListener:
                                                   timeout=5, 
                                                   phrase_time_limit=10)
                     
-                    # Dinleme durmuşsa hemen çık
+                    # Dinleme durmuşsa hemen çik
                     if not self.is_listening:
                         break
                         
@@ -146,13 +146,13 @@ class CommandListener:
                         if self.debug_mode:
                             print(f"Recognized: {text}")
                         
-                        # Dinleme durmuşsa komut çağrılmasın
+                        # Dinleme durmuşsa komut çağrilmasin
                         if not self.is_listening:
                             break
                             
                         # Call callback with recognized text
                         if self.callback and text:
-                            # Callback fonksiyonunu farklı bir thread'de çağır
+                            # Callback fonksiyonunu farkli bir thread'de çağir
                             def safe_callback():
                                 try:
                                     self.callback(text)
@@ -187,7 +187,7 @@ class CommandListener:
             try:
                 text = input("Command > ")
                 
-                if text.lower() in ["exit", "quit", "çık", "çıkış"]:
+                if text.lower() in ["exit", "quit", "çik", "çikiş"]:
                     if self.callback:
                         self.callback("exit")
                     break

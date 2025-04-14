@@ -1,3 +1,3 @@
 """
-Kaynaklar için paket tanımlama dosyası
+Kaynaklar için paket tanimlama dosyasi
 """ 

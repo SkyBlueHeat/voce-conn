@@ -19,7 +19,7 @@ try:
     EDGE_TTS_AVAILABLE = True
 except ImportError:
     EDGE_TTS_AVAILABLE = False
-    print("Edge TTS kütüphanesi bulunamadı, pyttsx3 kullanılacak")
+    print("Edge TTS kutuphanesi bulunamadi, pyttsx3 kullanilacak")
 
 try:
     import pygame
@@ -39,31 +39,31 @@ load_dotenv()
 # Voice feedback setting
 VOICE_FEEDBACK = os.getenv('VOICE_FEEDBACK', 'true').lower() == 'true'
 
-# TTS Configuration - DÜZELTME: TTS_RATE değerini güvenli bir şekilde dönüştür
+# TTS Configuration - DuZELTME: TTS_RATE değerini guvenli bir şekilde dönuştur
 try:
     rate_str = os.getenv('TTS_RATE', '0')
     # + ve % karakterlerini temizle
     rate_str = rate_str.replace('%', '').replace('+', '')
     TTS_RATE = int(rate_str)
 except (ValueError, TypeError):
-    print(f"TTS_RATE değeri ({os.getenv('TTS_RATE')}) int'e çevrilemedi, varsayılan değer kullanılıyor")
+    print(f"TTS_RATE değeri ({os.getenv('TTS_RATE')}) int'e çevrilemedi, varsayilan değer kullaniliyor")
     TTS_RATE = 0
 
-# Diğer TTS ayarları
+# Diğer TTS ayarlari
 try:
     volume_str = os.getenv('TTS_VOLUME', '1.0')
-    # % ve + karakterlerini kaldır
+    # % ve + karakterlerini kaldir
     volume_str = volume_str.replace('%', '').replace('+', '')
     volume_float = float(volume_str) / 100.0 if '%' in os.getenv('TTS_VOLUME', '') else float(volume_str)
-    # 0.0 ile 1.0 arasında olduğundan emin ol
+    # 0.0 ile 1.0 arasinda olduğundan emin ol
     TTS_VOLUME = max(0.0, min(1.0, volume_float))
 except (ValueError, TypeError):
     TTS_VOLUME = 1.0
-    print(f"TTS_VOLUME değeri ({os.getenv('TTS_VOLUME')}) float'a çevrilemedi, varsayılan değer kullanılıyor")
+    print(f"TTS_VOLUME değeri ({os.getenv('TTS_VOLUME')}) float'a çevrilemedi, varsayilan değer kullaniliyor")
 
 TTS_ENGINE = os.getenv('TTS_ENGINE', 'edge-tts').lower()  # 'edge-tts' veya 'pyttsx3'
 EDGE_TTS_VOICE = os.getenv('EDGE_TTS_VOICE', 'tr-TR-EmelNeural')  # Edge TTS için ses
-EDGE_TTS_RATE = os.getenv('EDGE_TTS_RATE', '+0%')  # Normal hız (değişim yok)
+EDGE_TTS_RATE = os.getenv('EDGE_TTS_RATE', '+0%')  # Normal hiz (değişim yok)
 EDGE_TTS_VOLUME = os.getenv('EDGE_TTS_VOLUME', '+0%')  # Normal ses seviyesi
 
 # Temporary directory for audio files
@@ -79,75 +79,75 @@ _edge_communicate = None
 # Global flag to enable detailed logging
 DEBUG_TTS = False
 
-# Doğal konuşma için rastgele konuşma kalıpları
+# Doğal konuşma için rastgele konuşma kaliplari
 GREETING_PHRASES = [
-    "Merhaba, size nasıl yardımcı olabilirim?",
+    "Merhaba, size nasil yardimci olabilirim?",
     "Merhaba, ne yapmak istersiniz?",
-    "Dinliyorum, nasıl yardımcı olabilirim?",
-    "Size nasıl yardımcı olabilirim?",
+    "Dinliyorum, nasil yardimci olabilirim?",
+    "Size nasil yardimci olabilirim?",
     "Sizi dinliyorum."
 ]
 
 ACKNOWLEDGEMENT_PHRASES = [
     "Tamam",
-    "Hemen yapıyorum",
-    "Anlaşıldı",
+    "Hemen yapiyorum",
+    "Anlaşildi",
     "Hemen hallediyorum",
     "Peki",
     "Tabii"
 ]
 
 COMPLETION_PHRASES = [
-    "İşlem tamamlandı",
-    "Hazır",
-    "Tamamlandı",
-    "İşlemi tamamladım",
-    "Tamamdır"
+    "İşlem tamamlandi",
+    "Hazir",
+    "Tamamlandi",
+    "İşlemi tamamladim",
+    "Tamamdir"
 ]
 
 ERROR_PHRASES = [
-    "Üzgünüm, bunu yapamadım",
+    "uzgunum, bunu yapamadim",
     "Maalesef bir hata oluştu",
-    "Bu komutu anlamadım",
-    "Üzgünüm, şu anda bunu yapamıyorum"
+    "Bu komutu anlamadim",
+    "uzgunum, şu anda bunu yapamiyorum"
 ]
 
 THINKING_PHRASES = [
-    "Düşünüyorum...",
+    "Duşunuyorum...",
     "Bir saniye...",
-    "Bakıyorum..."
+    "Bakiyorum..."
 ]
 
 # Temizlenecek dosya listesi
 _pending_cleanup_files = []
 _cleanup_thread_active = False
 
-# Günün saatine göre selamlama mesajları
+# Gunun saatine göre selamlama mesajlari
 MORNING_GREETINGS = [
-    "Günaydın! Size nasıl yardımcı olabilirim?",
-    "Günaydın! Bugün size nasıl yardımcı olabilirim?",
-    "Günaydın! Sesli asistanınız hizmetinizde."
+    "Gunaydin! Size nasil yardimci olabilirim?",
+    "Gunaydin! Bugun size nasil yardimci olabilirim?",
+    "Gunaydin! Sesli asistaniniz hizmetinizde."
 ]
 
 AFTERNOON_GREETINGS = [
-    "İyi günler! Size nasıl yardımcı olabilirim?",
-    "İyi günler! Bugün size nasıl yardımcı olabilirim?",
-    "İyi günler! Sesli asistanınız hizmetinizde."
+    "İyi gunler! Size nasil yardimci olabilirim?",
+    "İyi gunler! Bugun size nasil yardimci olabilirim?",
+    "İyi gunler! Sesli asistaniniz hizmetinizde."
 ]
 
 EVENING_GREETINGS = [
-    "İyi akşamlar! Size nasıl yardımcı olabilirim?",
-    "İyi akşamlar! Bugün size nasıl yardımcı olabilirim?",
-    "İyi akşamlar! Sesli asistanınız hizmetinizde."
+    "İyi akşamlar! Size nasil yardimci olabilirim?",
+    "İyi akşamlar! Bugun size nasil yardimci olabilirim?",
+    "İyi akşamlar! Sesli asistaniniz hizmetinizde."
 ]
 
 NIGHT_GREETINGS = [
-    "İyi geceler! Size nasıl yardımcı olabilirim?",
-    "Geç saatte çalışıyorsunuz! Size nasıl yardımcı olabilirim?",
-    "İyi geceler! Sesli asistanınız hizmetinizde."
+    "İyi geceler! Size nasil yardimci olabilirim?",
+    "Geç saatte çalişiyorsunuz! Size nasil yardimci olabilirim?",
+    "İyi geceler! Sesli asistaniniz hizmetinizde."
 ]
 
-# TTS motorları için öğeler
+# TTS motorlari için öğeler
 tts_engine = None
 tts_voice = None
 pygame_initialized = False
@@ -164,7 +164,7 @@ tts_buffer_running = False
 def get_tts_engine():
     """
     Initialize and return TTS engine (singleton pattern)
-    Edge TTS kullanılacaksa None döndürür çünkü her çağrıda ayrı iletişim kurulur
+    Edge TTS kullanilacaksa None döndurur çunku her çağrida ayri iletişim kurulur
     """
     global _tts_engine
     
@@ -172,24 +172,24 @@ def get_tts_engine():
     if TTS_ENGINE == 'edge-tts' and EDGE_TTS_AVAILABLE:
         return None
     
-    # Pyttsx3 için normal akış
+    # Pyttsx3 için normal akiş
     with _tts_lock:
         if _tts_engine is None:
             try:
                 import pyttsx3
                 
-                # Windows'ta önce SAPI5 motorunu dene (daha iyi Türkçe destek olabilir)
-                if os.name == 'nt':  # Windows işletim sistemi kontrolü
+                # Windows'ta önce SAPI5 motorunu dene (daha iyi Turkçe destek olabilir)
+                if os.name == 'nt':  # Windows işletim sistemi kontrolu
                     try:
                         print("Windows SAPI5 TTS motoru deneniyor...")
                         _tts_engine = pyttsx3.init(driverName='sapi5')
                     except:
-                        print("SAPI5 başlatılamadı, varsayılan motor kullanılıyor...")
+                        print("SAPI5 başlatilamadi, varsayilan motor kullaniliyor...")
                         _tts_engine = pyttsx3.init()
                 else:
                     _tts_engine = pyttsx3.init()
                 
-                # Konuşma hızı (düşük değer daha yavaş konuşma)
+                # Konuşma hizi (duşuk değer daha yavaş konuşma)
                 _tts_engine.setProperty('rate', TTS_RATE)
                 
                 # Ses seviyesi (0.0 - 1.0)
@@ -199,10 +199,10 @@ def get_tts_engine():
                 try:
                     voices = _tts_engine.getProperty('voices')
                 except Exception as e:
-                    print(f"Sesler alınamadı: {e}")
+                    print(f"Sesler alinamadi: {e}")
                     voices = []
                 
-                # Uygun bir ses bulup uygulamak için farklı yöntemler dene
+                # Uygun bir ses bulup uygulamak için farkli yöntemler dene
                 turkish_voice = None
                 microsoft_voice = None
                 female_voice = None
@@ -220,33 +220,33 @@ def get_tts_engine():
                                 voice_info += f" - {voice.languages}"
                             print(voice_info)
                             
-                            # Varsayılan sesi en azından kaydet
+                            # Varsayilan sesi en azindan kaydet
                             if best_voice is None:
                                 best_voice = voice
                             
-                            # Önce direkt Türkçe ses ara
+                            # Önce direkt Turkçe ses ara
                             if ('turkish' in voice_name.lower() or 
-                                'türk' in voice_name.lower() or 
+                                'turk' in voice_name.lower() or 
                                 'tr-' in voice_id.lower() or 
                                 'tr_' in voice_id.lower()):
                                 turkish_voice = voice
-                                print(f"  [Türkçe ses bulundu: {voice_name}]")
+                                print(f"  [Turkçe ses bulundu: {voice_name}]")
                             
                             # Sonra Microsoft sesleri için kontrol et
                             if 'microsoft' in voice_id.lower() and not microsoft_voice:
                                 microsoft_voice = voice
-                                if not turkish_voice:  # Türkçe ses bulunmadıysa bilgilendirme yap
+                                if not turkish_voice:  # Turkçe ses bulunmadiysa bilgilendirme yap
                                     print(f"  [Microsoft sesi bulundu: {voice_name}]")
                             
-                            # Kadın sesi ara
+                            # Kadin sesi ara
                             if ('female' in voice_name.lower() and 
                                 not 'male' in voice_name.lower()):
                                 female_voice = voice
                                 
                         except Exception as ve:
-                            print(f"Ses bilgisi alınamadı {idx}: {ve}")
+                            print(f"Ses bilgisi alinamadi {idx}: {ve}")
                     
-                    # Ses seçimini öncelik sırasına göre yap
+                    # Ses seçimini öncelik sirasina göre yap
                     selected_voice = turkish_voice or female_voice or microsoft_voice or best_voice
                     
                     if selected_voice:
@@ -256,18 +256,18 @@ def get_tts_engine():
                                 print(f"Seçilen TTS sesi: {getattr(selected_voice, 'name', 'Bilinmeyen ses')}")
                                 _tts_engine.setProperty('voice', voice_id)
                             else:
-                                print(f"Seçilen sesin ID'si bulunamadı")
+                                print(f"Seçilen sesin ID'si bulunamadi")
                         except Exception as se:
-                            print(f"Ses ayarlanırken hata: {se}")
+                            print(f"Ses ayarlanirken hata: {se}")
                     else:
-                        print("Uygun ses bulunamadı, varsayılan ses kullanılıyor")
+                        print("Uygun ses bulunamadi, varsayilan ses kullaniliyor")
                 else:
-                    print("Mevcut sesler alınamadı, varsayılan kullanılacak")
+                    print("Mevcut sesler alinamadi, varsayilan kullanilacak")
                 
-                print("Sesli geri bildirim sistemi hazır.")
+                print("Sesli geri bildirim sistemi hazir.")
                 
             except Exception as e:
-                print(f"TTS motoru başlatılırken hata: {e}")
+                print(f"TTS motoru başlatilirken hata: {e}")
                 _tts_engine = None
                 
         return _tts_engine
@@ -279,13 +279,13 @@ async def _speak_with_edge_tts(text):
     global _tts_busy
     
     try:
-        # Thread güvenliği için kilitleme
+        # Thread guvenliği için kilitleme
         _tts_busy = True
         
-        # Benzersiz bir geçici dosya adı oluştur
+        # Benzersiz bir geçici dosya adi oluştur
         temp_file = os.path.join(TEMP_DIR, f"tts_{int(time.time() * 1000)}.mp3")
         
-        # Edge TTS iletişimi (communicate) ve ses dosyası oluştur
+        # Edge TTS iletişimi (communicate) ve ses dosyasi oluştur
         communicate = edge_tts.Communicate(
             text, 
             EDGE_TTS_VOICE,
@@ -293,52 +293,52 @@ async def _speak_with_edge_tts(text):
             volume=EDGE_TTS_VOLUME
         )
         
-        # Ses dosyasını oluştur
+        # Ses dosyasini oluştur
         await communicate.save(temp_file)
-        print(f"Ses dosyası oluşturuldu: {temp_file}")
+        print(f"Ses dosyasi oluşturuldu: {temp_file}")
         
         if DEBUG_TTS:
             print(f"[TTS] Metin: {text}")
         
-        # Pygame ile ses çal - daha hızlı yanıt için
+        # Pygame ile ses çal - daha hizli yanit için
         try:
             if DEBUG_TTS:
-                print("[TTS] Pygame ile ses çalınıyor...")
+                print("[TTS] Pygame ile ses çaliniyor...")
             
-            # Pygame başlatılmamışsa başlat
+            # Pygame başlatilmamişsa başlat
             if not pygame.get_init():
                 pygame.init()
                 
             if not pygame.mixer.get_init():
-                pygame.mixer.init(frequency=44100, buffer=1024, channels=1)  # Daha düşük buffer boyutu
+                pygame.mixer.init(frequency=44100, buffer=1024, channels=1)  # Daha duşuk buffer boyutu
             
-            # Ses dosyasını yükle ve çal - daha hızlı yanıt için
+            # Ses dosyasini yukle ve çal - daha hizli yanit için
             pygame.mixer.music.load(temp_file)
             pygame.mixer.music.play()
             
-            # Daha kısa bir bekleme döngüsü
+            # Daha kisa bir bekleme döngusu
             max_wait = 3.0  # En fazla 3 saniye bekle
             start_time = time.time()
             
-            # Sesin çalmasını bekle - daha verimli döngü
+            # Sesin çalmasini bekle - daha verimli döngu
             while pygame.mixer.music.get_busy() and (time.time() - start_time < max_wait):
-                await asyncio.sleep(0.05)  # Daha kısa bekleme aralığı
+                await asyncio.sleep(0.05)  # Daha kisa bekleme araliği
                 
-            # Ses çalmayı durdur
+            # Ses çalmayi durdur
             pygame.mixer.music.stop()
             
             if DEBUG_TTS:
-                print("[TTS] Pygame ses çalma tamamlandı")
+                print("[TTS] Pygame ses çalma tamamlandi")
                 
         except Exception as e:
-            print(f"Pygame ses çalma hatası: {e}")
+            print(f"Pygame ses çalma hatasi: {e}")
             
-            # Son çare - ses çalmayı atla, sadece debug göster
+            # Son çare - ses çalmayi atla, sadece debug göster
             print(f"[TTS] ATLANMIŞ SES: {text}")
         
-        # Temizlik - daha kısa bekleme
+        # Temizlik - daha kisa bekleme
         try:
-            await asyncio.sleep(0.2)  # Çok daha kısa bekleme
+            await asyncio.sleep(0.2)  # Çok daha kisa bekleme
             if os.path.exists(temp_file):
                 try:
                     os.remove(temp_file)
@@ -347,21 +347,21 @@ async def _speak_with_edge_tts(text):
                 except Exception as e:
                     if DEBUG_TTS:
                         print(f"[TTS] Dosya silinemiyor: {temp_file}")
-                    # Dosyayı gecikmiş temizlemeye ekle
+                    # Dosyayi gecikmiş temizlemeye ekle
                     _schedule_cleanup(temp_file)
         except Exception as e:
             if DEBUG_TTS:
-                print(f"[TTS] Dosya temizleme hatası: {e}")
+                print(f"[TTS] Dosya temizleme hatasi: {e}")
             
     except Exception as e:
-        print(f"Edge TTS hatası: {e}")
+        print(f"Edge TTS hatasi: {e}")
         _fallback_to_pyttsx3(text)
     finally:
-        _tts_busy = False  # Kilidi kaldır - çok önemli
+        _tts_busy = False  # Kilidi kaldir - çok önemli
 
 def _fallback_to_pyttsx3(text):
     """
-    Edge TTS başarısız olursa pyttsx3 ile konuşma yaptır
+    Edge TTS başarisiz olursa pyttsx3 ile konuşma yaptir
     """
     engine = get_tts_engine()
     if engine:
@@ -369,7 +369,7 @@ def _fallback_to_pyttsx3(text):
             engine.say(text)
             engine.runAndWait()
         except Exception as e:
-            print(f"Pyttsx3 hatası: {e}")
+            print(f"Pyttsx3 hatasi: {e}")
 
 def speak_text(text, async_mode=True):
     """
@@ -381,10 +381,10 @@ def speak_text(text, async_mode=True):
     """
     global _tts_engine, _tts_busy
     
-    # Eğer TTS meşgulse, hemen çık
+    # Eğer TTS meşgulse, hemen çik
     if _tts_busy:
         if DEBUG_TTS:
-            print(f"[TTS] TTS meşgul olduğu için atlanıyor: {text}")
+            print(f"[TTS] TTS meşgul olduğu için atlaniyor: {text}")
         return
     
     if not VOICE_FEEDBACK:
@@ -396,16 +396,16 @@ def speak_text(text, async_mode=True):
         print(f"[TTS] Geçersiz metin: {text}")
         return
     
-    # ChatGPT tarzı daha doğal cümleler kullanma
+    # ChatGPT tarzi daha doğal cumleler kullanma
     text = add_natural_language_elements(text)
         
-    # Çok uzun metinleri kısalt veya parçala
+    # Çok uzun metinleri kisalt veya parçala
     if len(text) > 200:
-        # Uzun metni cümlelere ayır
+        # Uzun metni cumlelere ayir
         sentences = split_into_sentences(text)
-        # Her cümleyi ayrı ayrı söyle
+        # Her cumleyi ayri ayri söyle
         for sentence in sentences:
-            # Son cümle değilse async_mode=True, son cümle ise orijinal async_mode kullan
+            # Son cumle değilse async_mode=True, son cumle ise orijinal async_mode kullan
             speak_single_text(sentence, async_mode=(async_mode if sentence == sentences[-1] else True))
         return
     else:
@@ -414,17 +414,17 @@ def speak_text(text, async_mode=True):
         
 def speak_single_text(text, async_mode=True):
     """
-    Tek bir metin parçasını TTS ile söyle
+    Tek bir metin parçasini TTS ile söyle
     """
     global _tts_engine, _tts_busy
     
-    # Eğer TTS meşgulse, hemen çık
+    # Eğer TTS meşgulse, hemen çik
     if _tts_busy:
         if DEBUG_TTS:
-            print(f"[TTS] TTS meşgul olduğu için atlanıyor: {text}")
+            print(f"[TTS] TTS meşgul olduğu için atlaniyor: {text}")
         return
     
-    # Türkçe karakter ve sözcük düzeltmeleri yap
+    # Turkçe karakter ve sözcuk duzeltmeleri yap
     processed_text = _normalize_turkish_text(text)
     
     # Edge TTS kullan
@@ -438,18 +438,18 @@ def speak_single_text(text, async_mode=True):
             thread.daemon = True
             thread.start()
         else:
-            # Blocking mode - sync çalıştırır
+            # Blocking mode - sync çaliştirir
             asyncio.run(_speak_with_edge_tts(processed_text))
         return
     
-    # Pyttsx3 kullan (varsayılan)
-    # TTS motoru başlatılmamışsa tekrar dene
+    # Pyttsx3 kullan (varsayilan)
+    # TTS motoru başlatilmamişsa tekrar dene
     if _tts_engine is None:
         get_tts_engine()
         
-    # Hala başlatılamadıysa sadece yazdır ve çık
+    # Hala başlatilamadiysa sadece yazdir ve çik
     if _tts_engine is None:
-        print(f"[TTS Error] TTS motoru başlatılamadı: {text}")
+        print(f"[TTS Error] TTS motoru başlatilamadi: {text}")
         return
     
     # TTS motorunu kullan
@@ -471,7 +471,7 @@ def speak_single_text(text, async_mode=True):
                         _tts_engine.runAndWait()
                     except Exception as inner_e:
                         print(f"[TTS Error in engine.say/runAndWait] {inner_e}")
-                        # Tekrar başlatmayı dene
+                        # Tekrar başlatmayi dene
                         shutdown_tts()
                         time.sleep(0.2)
                         get_tts_engine()
@@ -492,67 +492,67 @@ def speak_single_text(text, async_mode=True):
                 _tts_engine.runAndWait()
         except Exception as e:
             print(f"[TTS Error in blocking mode] {e}")
-            # Tekrar başlatmayı dene
+            # Tekrar başlatmayi dene
             shutdown_tts()
             time.sleep(0.2)
             get_tts_engine()
 
 def add_natural_language_elements(text):
     """
-    Metni daha doğal dil kullanımıyla zenginleştir - ChatGPT tarzı
+    Metni daha doğal dil kullanimiyla zenginleştir - ChatGPT tarzi
     """
     text = text.strip()
     
-    # Komut bulunamadı
-    if "komut bulunamadı" in text.lower():
+    # Komut bulunamadi
+    if "komut bulunamadi" in text.lower():
         return random.choice([
-            "Üzgünüm, bu komutu tanıyamadım. Başka bir şekilde ifade edebilir misiniz?",
-            "Bu komutu anlayamadım. Farklı bir komut deneyin.",
-            "Maalesef ne demek istediğinizi anlayamadım. Yardım için 'yardım' diyebilirsiniz."
+            "uzgunum, bu komutu taniyamadim. Başka bir şekilde ifade edebilir misiniz?",
+            "Bu komutu anlayamadim. Farkli bir komut deneyin.",
+            "Maalesef ne demek istediğinizi anlayamadim. Yardim için 'yardim' diyebilirsiniz."
         ])
     
-    # Komut çalıştırıldı
-    if "komutu çalıştırıldı" in text.lower():
-        base_command = text.split("komutu çalıştırıldı")[0].strip()
+    # Komut çaliştirildi
+    if "komutu çaliştirildi" in text.lower():
+        base_command = text.split("komutu çaliştirildi")[0].strip()
         return random.choice([
-            f"{base_command} işlemi tamamlandı.",
+            f"{base_command} işlemi tamamlandi.",
             f"{base_command} için istediğiniz işlemi gerçekleştirdim.",
             f"{base_command} isteğiniz yerine getirildi."
         ])
     
-    # Asistan kapatılıyor
-    if "asistan kapatılıyor" in text.lower():
+    # Asistan kapatiliyor
+    if "asistan kapatiliyor" in text.lower():
         return random.choice([
-            "Görüşmek üzere, iyi günler dilerim.",
-            "Asistan kapatılıyor. Tekrar görüşmek üzere.",
-            "Hoşça kalın, tekrar ihtiyacınız olduğunda buradayım."
+            "Göruşmek uzere, iyi gunler dilerim.",
+            "Asistan kapatiliyor. Tekrar göruşmek uzere.",
+            "Hoşça kalin, tekrar ihtiyaciniz olduğunda buradayim."
         ])
     
-    # Asistan hazır
-    if "asistan hazır" in text.lower() or "sizi dinliyorum" in text.lower():
+    # Asistan hazir
+    if "asistan hazir" in text.lower() or "sizi dinliyorum" in text.lower():
         return random.choice(GREETING_PHRASES)
     
-    # Media kontrolü
-    if "müzik" in text.lower() or "video" in text.lower() or "ses" in text.lower():
+    # Media kontrolu
+    if "muzik" in text.lower() or "video" in text.lower() or "ses" in text.lower():
         if "başlat" in text.lower() or "oynat" in text.lower():
             return random.choice([
-                "Müziği başlatıyorum.",
-                "Medya oynatılıyor.",
-                "Tamam, başlatıyorum."
+                "Muziği başlatiyorum.",
+                "Medya oynatiliyor.",
+                "Tamam, başlatiyorum."
             ])
         elif "durdur" in text.lower() or "duraklat" in text.lower():
             return random.choice([
-                "Müziği durdurdum.",
-                "Medya duraklatıldı.",
+                "Muziği durdurdum.",
+                "Medya duraklatildi.",
                 "Tamam, durdurdum."
             ])
     
-    # Standart komutu olduğu gibi bırak
+    # Standart komutu olduğu gibi birak
     return text
 
 def split_into_sentences(text):
     """
-    Uzun metni daha kısa cümlelere böl
+    Uzun metni daha kisa cumlelere böl
     """
     # Noktalama işaretleriyle böl
     parts = []
@@ -563,7 +563,7 @@ def split_into_sentences(text):
         if not sentence:
             continue
             
-        # Cümle uzunluğu kontrolü
+        # Cumle uzunluğu kontrolu
         if len(current_text) + len(sentence) < 150:
             if current_text:
                 current_text += " " + sentence
@@ -573,11 +573,11 @@ def split_into_sentences(text):
             parts.append(current_text)
             current_text = sentence
     
-    # Son kısmı ekle
+    # Son kismi ekle
     if current_text:
         parts.append(current_text)
     
-    # Çok kısa bir metin varsa direkt tek parça olarak döndür
+    # Çok kisa bir metin varsa direkt tek parça olarak döndur
     if len(parts) == 0:
         return [text]
         
@@ -585,13 +585,13 @@ def split_into_sentences(text):
 
 def _normalize_turkish_text(text):
     """
-    Türkçe karakterlerin doğru telaffuz edilmesi için metni düzenle
+    Turkçe karakterlerin doğru telaffuz edilmesi için metni duzenle
     """
     # Orijinal metni sakla
     original_text = text
     
-    # Türkçe karakterlerin daha iyi telaffuzu için değişiklikler
-    # Bazı karakterleri daha iyi telaffuz için başkalarıyla değiştir
+    # Turkçe karakterlerin daha iyi telaffuzu için değişiklikler
+    # Bazi karakterleri daha iyi telaffuz için başkalariyla değiştir
     replacements = {
         'ğ': 'g',        # yumuşak g -> g sesi (daha doğal)
         'Ğ': 'G',
@@ -599,70 +599,70 @@ def _normalize_turkish_text(text):
         'Ş': 'Sh',
         'ç': 'ch',       # ç -> ch sesi
         'Ç': 'Ch',
-        'ı': 'ı',        # kapalı ı için orijinali koruyalım
-        'İ': 'i',        # büyük i
-        'ö': 'ö',        # ö sesi için orijinali koruyalım, Edge-TTS daha iyi telaffuz ediyor
+        'i': 'i',        # kapali i için orijinali koruyalim
+        'İ': 'i',        # buyuk i
+        'ö': 'ö',        # ö sesi için orijinali koruyalim, Edge-TTS daha iyi telaffuz ediyor
         'Ö': 'Ö',
-        'ü': 'ü',        # ü sesi için orijinali koruyalım
-        'Ü': 'Ü',
+        'u': 'u',        # u sesi için orijinali koruyalim
+        'u': 'u',
     }
     
-    # Bazı Türkçe kelime ve ifadelerin telaffuzu iyileştirme
-    # Özel kayıtlı cümleler - tam eşleşmeler için
+    # Bazi Turkçe kelime ve ifadelerin telaffuzu iyileştirme
+    # Özel kayitli cumleler - tam eşleşmeler için
     phrase_replacements = {
-        "komut anlaşılamadı": "komut anlaşılamadı",
-        "komut bulunamadı": "komut bulunamadı",
+        "komut anlaşilamadi": "komut anlaşilamadi",
+        "komut bulunamadi": "komut bulunamadi",
         "sizi dinliyorum": "sizi dinliyorum",
-        "komut başarıyla çalıştırıldı": "komut başarıyla çalıştırıldı",
-        "asistan kapatılıyor": "asistan kapatılıyor",
-        "asistan hazır": "asistan hazır",
-        "konuşma modu kapatılıyor": "konuşma modu kapatılıyor",
+        "komut başariyla çaliştirildi": "komut başariyla çaliştirildi",
+        "asistan kapatiliyor": "asistan kapatiliyor",
+        "asistan hazir": "asistan hazir",
+        "konuşma modu kapatiliyor": "konuşma modu kapatiliyor",
         "başka bir komut söyleyebilirsiniz": "başka bir komut söyleyebilirsiniz",
         "wake word moduna geçiliyor": "wake word moduna geçiliyor",
     }
     
-    # Tam cümle eşleşmelerini kontrol et
+    # Tam cumle eşleşmelerini kontrol et
     cleaned_text = text.lower().strip()
     if cleaned_text in phrase_replacements:
         return phrase_replacements[cleaned_text]
     
-    # Yaygın komutlar ve kelimeler için düzeltmeler - Edge-TTS için daha az değişiklik gerekiyor,
-    # sadece problemli olanları ekleyelim
+    # Yaygin komutlar ve kelimeler için duzeltmeler - Edge-TTS için daha az değişiklik gerekiyor,
+    # sadece problemli olanlari ekleyelim
     word_replacements = {
-        # Problemli sayılar
-        "sıfır": "sıfır",
-        "üç": "üç",
+        # Problemli sayilar
+        "sifir": "sifir",
+        "uç": "uç",
         "dört": "dört",
         "beş": "beş",
-        "altı": "altı",
-        "kırk": "kırk",
-        "yüz": "yüz",
+        "alti": "alti",
+        "kirk": "kirk",
+        "yuz": "yuz",
         
         # Problemli komutlar
-        "başarıyla": "başarıyla",
-        "çalıştırıldı": "çalıştırıldı",
-        "müzik": "müzik",
+        "başariyla": "başariyla",
+        "çaliştirildi": "çaliştirildi",
+        "muzik": "muzik",
         "durdur": "durdur",
         "başlat": "başlat",
         "aç": "aç",
-        "artır": "artır",
-        "altyazı": "altyazı"
+        "artir": "artir",
+        "altyazi": "altyazi"
     }
     
-    # TTS motorunun kelimeler arasına boşluk koymasını sağla
+    # TTS motorunun kelimeler arasina boşluk koymasini sağla
     text = ' '.join(text.split())
     
-    # Noktalama işaretlerinden sonra duraklatma ekle (virgül ekleyerek)
-    # Bu virgüller TTS motorunun daha doğal konuşmasını sağlar
+    # Noktalama işaretlerinden sonra duraklatma ekle (virgul ekleyerek)
+    # Bu virguller TTS motorunun daha doğal konuşmasini sağlar
     for punct in ['.', '!', '?', ';', ':']:
         text = text.replace(punct, f"{punct}, ")
     
-    # Doğal konuşma için sesler arası küçük boşluklar ekle
+    # Doğal konuşma için sesler arasi kuçuk boşluklar ekle
     text = insert_breathing_pauses(text)
     
-    # Debug amaçlı
+    # Debug amaçli
     if os.getenv('DEBUG_MODE', 'false').lower() == 'true':
-        print(f"[TTS DEBUG] Orijinal: '{original_text}' -> Düzeltilmiş: '{text}'")
+        print(f"[TTS DEBUG] Orijinal: '{original_text}' -> Duzeltilmiş: '{text}'")
         
     return text
 
@@ -670,21 +670,21 @@ def insert_breathing_pauses(text):
     """
     Daha doğal konuşma için nefes alma efekti olarak duraklama işaretleri ekle
     """
-    # Çok kısa metinler için işlem yapma
+    # Çok kisa metinler için işlem yapma
     if len(text) < 20:
         return text
         
-    # Cümleleri bölmek için noktalama işaretlerini kullan
+    # Cumleleri bölmek için noktalama işaretlerini kullan
     sentences = text.split(',')
     
-    # Her 3-5 kelimeden sonra küçük bir duraklama ekle
+    # Her 3-5 kelimeden sonra kuçuk bir duraklama ekle
     for i in range(len(sentences)):
         if i == 0:
             continue
         
         words = sentences[i].split()
         if len(words) > 4:
-            # Cümle içinde uygun bir yere duraklama ekle
+            # Cumle içinde uygun bir yere duraklama ekle
             insert_position = len(words) // 2
             words.insert(insert_position, ", ")
             sentences[i] = " ".join(words)
@@ -693,7 +693,7 @@ def insert_breathing_pauses(text):
 
 def greet():
     """
-    Karşılama mesajı söyle
+    Karşilama mesaji söyle
     """
     hour = time.localtime().tm_hour
     
@@ -708,25 +708,25 @@ def greet():
 
 def acknowledge():
     """
-    Onaylama mesajı söyle
+    Onaylama mesaji söyle
     """
     return random.choice(ACKNOWLEDGEMENT_PHRASES)
 
 def complete():
     """
-    Tamamlama mesajı söyle
+    Tamamlama mesaji söyle
     """
     return random.choice(COMPLETION_PHRASES)
     
 def error():
     """
-    Hata mesajı söyle
+    Hata mesaji söyle
     """
     return random.choice(ERROR_PHRASES)
 
 def thinking():
     """
-    Düşünme mesajı söyle
+    Duşunme mesaji söyle
     """
     return random.choice(THINKING_PHRASES)
 
@@ -734,9 +734,9 @@ def shutdown_tts():
     """Clean up TTS engine resources"""
     global _tts_engine, _tts_busy
     
-    print("TTS sistemi kapatılıyor...")
+    print("TTS sistemi kapatiliyor...")
     
-    # TTS meşgul bayrağını temizle
+    # TTS meşgul bayrağini temizle
     _tts_busy = False
     
     # Pygame'i kapat
@@ -758,7 +758,7 @@ def shutdown_tts():
     # Bekle
     time.sleep(0.5)
     
-    # Temp dizinindeki tüm geçici dosyaları temizle
+    # Temp dizinindeki tum geçici dosyalari temizle
     try:
         temp_files = []
         for file in os.listdir(TEMP_DIR):
@@ -771,18 +771,18 @@ def shutdown_tts():
             try:
                 os.remove(file_path)
                 if DEBUG_TTS:
-                    print(f"[TTS] Dosya kapatılırken silindi: {file_path}")
+                    print(f"[TTS] Dosya kapatilirken silindi: {file_path}")
             except:
                 pass
                 
-        # Kısa bekleme
+        # Kisa bekleme
         time.sleep(0.2)
         
         # İkinci temizleme denemesi (daha agresif)
         for file_path in temp_files:
             if os.path.exists(file_path):
                 try:
-                    # Windows'ta dosya kilidini zorla kaldırmaya çalış
+                    # Windows'ta dosya kilidini zorla kaldirmaya çaliş
                     if os.name == 'nt':
                         import subprocess
                         try:
@@ -798,10 +798,10 @@ def shutdown_tts():
                         print(f"[TTS] Dosya ikinci denemede silindi: {file_path}")
                 except:
                     if DEBUG_TTS:
-                        print(f"[TTS] Temp dosyası kapatma sırasında silinemedi: {file_path}")
+                        print(f"[TTS] Temp dosyasi kapatma sirasinda silinemedi: {file_path}")
     except Exception as e:
         if DEBUG_TTS:
-            print(f"[TTS] Temp dizini temizleme hatası: {e}")
+            print(f"[TTS] Temp dizini temizleme hatasi: {e}")
     
     # Pyttsx3 motorunu kapat
     with _tts_lock:
@@ -812,14 +812,14 @@ def shutdown_tts():
                 pass
             _tts_engine = None
     
-    print("TTS sistemi kapatıldı.")
+    print("TTS sistemi kapatildi.")
 
 def list_available_voices():
     """
     Mevcut Edge TTS seslerini listeler
     """
     if not EDGE_TTS_AVAILABLE:
-        print("Edge TTS kullanılamıyor. Lütfen 'pip install edge-tts' komutu ile yükleyin.")
+        print("Edge TTS kullanilamiyor. Lutfen 'pip install edge-tts' komutu ile yukleyin.")
         return []
     
     # Edge TTS seslerini asenkron olarak listele
@@ -828,8 +828,8 @@ def list_available_voices():
             voices = await edge_tts.list_voices()
             turkish_voices = [v for v in voices if v["Locale"].startswith("tr")]
             
-            # Tüm sesleri göster
-            print("\nTüm Edge TTS Türkçe sesleri:")
+            # Tum sesleri göster
+            print("\nTum Edge TTS Turkçe sesleri:")
             print("-" * 50)
             for idx, voice in enumerate(turkish_voices):
                 print(f"{idx+1}. {voice['ShortName']} - {voice['Gender']}")
@@ -839,11 +839,11 @@ def list_available_voices():
             print(f"Edge TTS sesleri listelenirken hata: {e}")
             return []
             
-    # Asenkron fonksiyonu çağır
+    # Asenkron fonksiyonu çağir
     return asyncio.run(_list_voices())
 
 def _schedule_cleanup(filename):
-    """Daha sonra temizlenecek dosyaları planlar"""
+    """Daha sonra temizlenecek dosyalari planlar"""
     global _pending_cleanup_files, _cleanup_thread_active
     
     if filename not in _pending_cleanup_files:
@@ -857,14 +857,14 @@ def _schedule_cleanup(filename):
         cleanup_thread.start()
 
 def _delayed_cleanup():
-    """Arka planda periyodik olarak geçici dosyaları temizler"""
+    """Arka planda periyodik olarak geçici dosyalari temizler"""
     global _pending_cleanup_files, _cleanup_thread_active
     
     try:
         # İlk 5 saniye bekle
         time.sleep(5)
         
-        # Şimdi dosyaları temizlemeyi dene
+        # Şimdi dosyalari temizlemeyi dene
         files_to_clean = _pending_cleanup_files.copy()
         success_count = 0
         
@@ -877,16 +877,16 @@ def _delayed_cleanup():
                     if DEBUG_TTS:
                         print(f"[TTS] Gecikmiş temizleme: {file}")
             except:
-                # Silinemeyen dosyaları listede tut
+                # Silinemeyen dosyalari listede tut
                 pass
         
-        # Başarısız temizleme sayısı
+        # Başarisiz temizleme sayisi
         failed_count = len(_pending_cleanup_files)
         
         # Hala silinemeyen dosya varsa, biraz daha bekleyip tekrar dene
         if failed_count > 0:
             if DEBUG_TTS:
-                print(f"[TTS] {success_count} dosya temizlendi, {failed_count} dosya kaldı. Tekrar deneniyor...")
+                print(f"[TTS] {success_count} dosya temizlendi, {failed_count} dosya kaldi. Tekrar deneniyor...")
             
             # Daha uzun bekle
             time.sleep(15)
@@ -901,16 +901,16 @@ def _delayed_cleanup():
                         if DEBUG_TTS:
                             print(f"[TTS] Gecikmiş temizleme (2. deneme): {file}")
                 except:
-                    # Hala silinemeyen dosyaları logla
+                    # Hala silinemeyen dosyalari logla
                     if DEBUG_TTS:
-                        print(f"[TTS] Dosya ısrarla silinemiyor: {file}")
+                        print(f"[TTS] Dosya israrla silinemiyor: {file}")
     except Exception as e:
         if DEBUG_TTS:
-            print(f"[TTS] Gecikmiş temizleme hatası: {e}")
+            print(f"[TTS] Gecikmiş temizleme hatasi: {e}")
     finally:
         _cleanup_thread_active = False
         
-        # Hala dosya varsa, tekrar planla (ama çok sık değil)
+        # Hala dosya varsa, tekrar planla (ama çok sik değil)
         if _pending_cleanup_files:
             # En az 5 dosya birikirse veya 30 saniye geçtiyse tekrar temizlemeyi dene
             if len(_pending_cleanup_files) >= 5:
@@ -919,17 +919,17 @@ def _delayed_cleanup():
                 cleanup_thread.daemon = True
                 cleanup_thread.start()
             else:
-                # Az sayıda dosya kaldıysa bırak, programdan çıkınca temizlenecek
+                # Az sayida dosya kaldiysa birak, programdan çikinca temizlenecek
                 pass
         
-        # TEMP_DIR içindeki tüm eski dosyaları da temizle (10 dakikadan eski)
+        # TEMP_DIR içindeki tum eski dosyalari da temizle (10 dakikadan eski)
         try:
             current_time = time.time()
             for file in os.listdir(TEMP_DIR):
                 if file.startswith("tts_") and file.endswith(".mp3"):
                     file_path = os.path.join(TEMP_DIR, file)
                     file_age = current_time - os.path.getmtime(file_path)
-                    # 10 dakikadan eski dosyaları temizle
+                    # 10 dakikadan eski dosyalari temizle
                     if file_age > 600:  # 10 dakika = 600 saniye
                         try:
                             os.remove(file_path)
@@ -943,51 +943,51 @@ def _delayed_cleanup():
 if __name__ == "__main__":
     # Test TTS
     print("Testing TTS...")
-    print(f"TTS_ENGINE ayarı: {TTS_ENGINE}")
+    print(f"TTS_ENGINE ayari: {TTS_ENGINE}")
     print(f"EDGE_TTS_AVAILABLE: {EDGE_TTS_AVAILABLE}")
     print(f"VOICE_FEEDBACK: {VOICE_FEEDBACK}")
     print(f"EDGE_TTS_VOICE: {EDGE_TTS_VOICE}")
     
-    # Türkçe Edge TTS seslerini listele
+    # Turkçe Edge TTS seslerini listele
     if EDGE_TTS_AVAILABLE:
-        print("\nEdge TTS kullanılabilir sesleri listeleniyor...")
+        print("\nEdge TTS kullanilabilir sesleri listeleniyor...")
         list_available_voices()
         
         # Edge TTS test
         print("\nEdge TTS test ediliyor...")
-        print("Test için kısa cümle söyleniyor...")
+        print("Test için kisa cumle söyleniyor...")
         try:
-            print("Async modda çalıştırılıyor...")
-            speak_text("Merhaba, ben Edge TTS ile çalışan bir test cümlesiyim.", async_mode=True)
-            print("Async mod başarılı, 2 saniye bekleniyor...")
+            print("Async modda çaliştiriliyor...")
+            speak_text("Merhaba, ben Edge TTS ile çalişan bir test cumlesiyim.", async_mode=True)
+            print("Async mod başarili, 2 saniye bekleniyor...")
             time.sleep(2)
             
-            print("Blocking modda çalıştırılıyor...")
-            speak_text("Bu cümle ise blocking modda çalışıyor. Bu şekilde çalışıyor mu kontrol ediyoruz.", async_mode=False)
-            print("Blocking mod başarılı!")
+            print("Blocking modda çaliştiriliyor...")
+            speak_text("Bu cumle ise blocking modda çalişiyor. Bu şekilde çalişiyor mu kontrol ediyoruz.", async_mode=False)
+            print("Blocking mod başarili!")
         except Exception as e:
-            print(f"Edge TTS test hatası: {e}")
+            print(f"Edge TTS test hatasi: {e}")
     else:
         # Pyttsx3 test
         print("\nPyttsx3 test ediliyor...")
         try:
-            speak_text("Merhaba, sesli asistanınız test ediliyor.", async_mode=False)
-            print("Pyttsx3 test başarılı!")
+            speak_text("Merhaba, sesli asistaniniz test ediliyor.", async_mode=False)
+            print("Pyttsx3 test başarili!")
         except Exception as e:
-            print(f"Pyttsx3 test hatası: {e}")
+            print(f"Pyttsx3 test hatasi: {e}")
     
-    print("Test tamamlandı.")
+    print("Test tamamlandi.")
     
-    # Geçici dosyaları listele
-    print("\nGeçici dosyaları kontrol ediyorum...")
+    # Geçici dosyalari listele
+    print("\nGeçici dosyalari kontrol ediyorum...")
     try:
         temp_files = [f for f in os.listdir(TEMP_DIR) if f.startswith("tts_")]
-        print(f"Geçici dosya sayısı: {len(temp_files)}")
+        print(f"Geçici dosya sayisi: {len(temp_files)}")
         if temp_files:
             print(f"Örnek geçici dosya: {temp_files[0]}")
     except Exception as e:
-        print(f"Geçici dosya kontrolü hatası: {e}")
+        print(f"Geçici dosya kontrolu hatasi: {e}")
     
     # Clean up
-    print("\nKaynakları temizliyorum...")
+    print("\nKaynaklari temizliyorum...")
     shutdown_tts() 

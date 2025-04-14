@@ -38,19 +38,19 @@ def list_microphones_detailed():
                 break
         
         print(f"{device['index']} [{is_default}] {device['name']}")
-        print(f"    Kanallar: {device['channels']}, Örnekleme hızı: {device['sample_rate']} Hz")
+        print(f"    Kanallar: {device['channels']}, ornekleme hizi: {device['sample_rate']} Hz")
         
         if sr_index >= 0:
             print(f"    Speech Recognition indeksi: {sr_index}")
         else:
-            print(f"    Speech Recognition indeksi bulunamadı")
+            print(f"    Speech Recognition indeksi bulunamadi")
         
         print("-" * 50)
     
-    print("\nNot: [✓] işareti varsayılan mikrofonu gösterir")
-    print("Sesli asistanı belirli bir mikrofonla başlatmak için:")
+    print("\nNot: [✓] işareti varsayilan mikrofonu gosterir")
+    print("Sesli asistani belirli bir mikrofonla başlatmak için:")
     print("  run_voice_assistant.bat <mikrofon_indeksi>")
-    print("  veya menüden '2 - Belirli bir mikrofon seç' seçeneğini kullanın")
+    print("  veya menuden '2 - Belirli bir mikrofon seç' seçeneğini kullanin")
     
     p.terminate()
 

@@ -18,8 +18,8 @@ try:
     print(f"Available wake words: {pvporcupine.KEYWORDS}")
 except ImportError as e:
     print(f"Error importing pvporcupine: {e}")
-    print("\nÖNEMLİ: Wake word detection modülünü yüklemek için lütfen:")
-    print("install_dependencies.bat dosyasını tekrar çalıştırın.\n")
+    print("\nÖNEMLİ: Wake word detection modulunu yuklemek için lutfen:")
+    print("install_dependencies.bat dosyasini tekrar çaliştirin.\n")
     HAS_PORCUPINE = False
 
 from dotenv import load_dotenv
@@ -102,10 +102,10 @@ class PicoWakeWordDetector:
         
     def start(self):
         """Start wake word detection"""
-        # Önceki çalışan bir instance varsa temizle
+        # Önceki çalişan bir instance varsa temizle
         if self.running:
             self.stop()
-            time.sleep(0.5)  # Dedektörün tam olarak kapanması için bekle
+            time.sleep(0.5)  # Dedektörun tam olarak kapanmasi için bekle
         
         # Porcupine engine'i tekrar başlat
         if not self.use_fallback_mode and not self.porcupine:
@@ -129,7 +129,7 @@ class PicoWakeWordDetector:
         if not self.running:
             return False
             
-        # Önce durum değişkenini güncelle
+        # Önce durum değişkenini guncelle
         self.running = False
         
         # Thread'i bekle
@@ -140,7 +140,7 @@ class PicoWakeWordDetector:
             except:
                 pass
         
-        # Kaynakları temizle
+        # Kaynaklari temizle
         if not self.use_fallback_mode:
             if self.audio_stream:
                 try:

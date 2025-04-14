@@ -81,13 +81,13 @@ class VoiceCommandListener:
                 self.logger.info(f"Selected microphone index {index}: {sr.Microphone.list_microphone_names()[index]}")
                 return mic
             else:
-                print("Varsayılan mikrofon kullanılıyor")
+                print("Varsayilan mikrofon kullaniliyor")
                 self.logger.info("Using default microphone")
                 return sr.Microphone()
         except Exception as e:
             print(f"Mikrofon seçilirken hata oluştu: {e}")
             self.logger.error(f"Error selecting microphone: {e}")
-            print("Varsayılan mikrofon kullanılıyor")
+            print("Varsayilan mikrofon kullaniliyor")
             self.logger.info("Falling back to default microphone")
             self.microphone_index = None
             return sr.Microphone()
@@ -98,7 +98,7 @@ class VoiceCommandListener:
         mode_str = "enabled" if self.dictation_mode else "disabled"
         self.logger.info(f"Dictation mode {mode_str}")
         print(f"Dictation mode {mode_str}")
-        # Dictation mode açıkken daha uzun duraklamalara izin ver
+        # Dictation mode açikken daha uzun duraklamalara izin ver
         if self.dictation_mode:
             self.recognizer.pause_threshold = 1.5  # Dictation için daha uzun duraklama
         else:
@@ -107,25 +107,25 @@ class VoiceCommandListener:
         
     def write_dictation(self):
         """Handle the 'Write what I say' command for dictating long texts at once"""
-        print("Söylediğinizi yazıyorum. Lütfen konuşmaya başlayın...")
+        print("Söylediğinizi yaziyorum. Lutfen konuşmaya başlayin...")
         self.logger.info("Starting 'Write what I say' dictation mode")
         
         try:
             with self.select_microphone(self.microphone_index) as source:
-                print("Dinliyorum... (Bitirmek için en az 2 saniye sessiz kalın)")
-                # Dictation için daha uzun bir dinleme süresi ve duraklama
+                print("Dinliyorum... (Bitirmek için en az 2 saniye sessiz kalin)")
+                # Dictation için daha uzun bir dinleme suresi ve duraklama
                 orig_pause = self.recognizer.pause_threshold
                 self.recognizer.pause_threshold = 2.0  # Longer pause for dictation end detection
                 
                 audio = self.recognizer.listen(source, timeout=None, phrase_time_limit=None)
                 
-                # Pause threshold'ı geri al
+                # Pause threshold'i geri al
                 self.recognizer.pause_threshold = orig_pause
                 
                 try:
                     # Recognize the dictated text
                     recognized_text = self.recognizer.recognize_google(audio, language=self.language)
-                    print(f"Yazdırılacak metin: {recognized_text}")
+                    print(f"Yazdirilacak metin: {recognized_text}")
                     self.logger.info(f"Dictating full text: {recognized_text}")
                     
                     # Type the recognized text
@@ -133,11 +133,11 @@ class VoiceCommandListener:
                     type_text(recognized_text)
                     return True
                 except sr.UnknownValueError:
-                    print("Söylediğinizi anlayamadım.")
+                    print("Söylediğinizi anlayamadim.")
                     self.logger.warning("Could not understand dictation")
                     return False
                 except sr.RequestError as e:
-                    print(f"Ses tanıma servisi şu anda kullanılamıyor: {e}")
+                    print(f"Ses tanima servisi şu anda kullanilamiyor: {e}")
                     self.logger.error(f"Dictation request error: {e}")
                     return False
         except Exception as e:
@@ -151,31 +151,31 @@ class VoiceCommandListener:
             import pyperclip
             from text_to_speech import speak_text
             
-            print("Yazdığınız/kopyaladığınız metni okuyorum...")
+            print("Yazdiğiniz/kopyaladiğiniz metni okuyorum...")
             self.logger.info("Starting 'Speak what I type' functionality")
             
             # Get text from clipboard
             clipboard_text = pyperclip.paste()
             
             if not clipboard_text or clipboard_text.strip() == "":
-                print("Clipboard'da okunacak metin bulunamadı.")
+                print("Clipboard'da okunacak metin bulunamadi.")
                 self.logger.warning("No text found in clipboard to speak")
                 return False
                 
             print(f"Okunan metin: {clipboard_text}")
             self.logger.info(f"Speaking text from clipboard: {clipboard_text}")
             
-            # Kullanılan projenin kendi TTS modülünü kullanalım - daha uyumlu olacaktır
+            # Kullanilan projenin kendi TTS modulunu kullanalim - daha uyumlu olacaktir
             speak_text(clipboard_text)
             
             return True
         except ImportError as e:
-            print(f"Gerekli modüller yüklü değil: {e}")
+            print(f"Gerekli moduller yuklu değil: {e}")
             self.logger.error(f"Required modules not installed: {e}")
-            print("pyperclip modülünü yüklemek için: pip install pyperclip")
+            print("pyperclip modulunu yuklemek için: pip install pyperclip")
             return False
         except Exception as e:
-            print(f"Metin okuma hatası: {e}")
+            print(f"Metin okuma hatasi: {e}")
             self.logger.error(f"Text-to-speech error: {e}")
             return False
         
@@ -184,11 +184,11 @@ class VoiceCommandListener:
         self.is_running = True
         self.logger.info("Starting voice command listener")
         
-        # Hata sayısı ve bekletme sürelerini izlemek için değişkenler
+        # Hata sayisi ve bekletme surelerini izlemek için değişkenler
         consecutive_errors = 0
-        max_consecutive_errors = 5  # Bu sayıdan fazla arka arkaya hata olursa yeniden başlat
-        error_backoff_time = 0.1    # Başlangıç bekleme süresi
-        max_backoff_time = 5.0      # Maksimum bekleme süresi
+        max_consecutive_errors = 5  # Bu sayidan fazla arka arkaya hata olursa yeniden başlat
+        error_backoff_time = 0.1    # Başlangiç bekleme suresi
+        max_backoff_time = 5.0      # Maksimum bekleme suresi
         
         try:
             # Use selected or default microphone
@@ -201,7 +201,7 @@ class VoiceCommandListener:
                 
                 while self.is_running:
                     try:
-                        # Önce mikrofonun hazır olduğundan emin olalım
+                        # Önce mikrofonun hazir olduğundan emin olalim
                         if source is None:
                             self.logger.error("Microphone source is None. Recreating microphone.")
                             source = self.select_microphone(self.microphone_index)
@@ -219,7 +219,7 @@ class VoiceCommandListener:
                         # Google Speech Recognition
                         recognized_text = self.recognizer.recognize_google(audio, language=self.language)
                         
-                        # Başarılı tanıma, hata sayacını sıfırla
+                        # Başarili tanima, hata sayacini sifirla
                         consecutive_errors = 0
                         
                         if self.debug_mode:
@@ -237,29 +237,29 @@ class VoiceCommandListener:
                             continue
                         
                         # Check for "Write what I say" command
-                        if "söylediğimi yaz" in recognized_text.lower() or "ne dersem yaz" in recognized_text.lower() or "yazdır" in recognized_text.lower():
+                        if "söylediğimi yaz" in recognized_text.lower() or "ne dersem yaz" in recognized_text.lower() or "yazdir" in recognized_text.lower():
                             self.write_dictation()
                             continue
                             
                         # Check for "Speak what I type" command
-                        if "yazdığımı oku" in recognized_text.lower() or "metni oku" in recognized_text.lower() or "yazdıklarımı seslendir" in recognized_text.lower():
+                        if "yazdiğimi oku" in recognized_text.lower() or "metni oku" in recognized_text.lower() or "yazdiklarimi seslendir" in recognized_text.lower():
                             self.speak_typed_text()
                             continue
                             
                         # If in dictation mode, handle continuous text input
                         if self.dictation_mode:
-                            print(f"Yazdırılacak metin: {recognized_text}")
+                            print(f"Yazdirilacak metin: {recognized_text}")
                             self.logger.info(f"Dictating: {recognized_text}")
-                            # Burada metni CommandExecutor üzerinden yazdırma işlemi yapılıyor
-                            # CommandExecutor'daki type_text fonksiyonunu doğrudan çağırıyoruz
-                            # Bu, klavye simülasyonu ile metni yazacak
+                            # Burada metni CommandExecutor uzerinden yazdirma işlemi yapiliyor
+                            # CommandExecutor'daki type_text fonksiyonunu doğrudan çağiriyoruz
+                            # Bu, klavye simulasyonu ile metni yazacak
                             try:
                                 from command_executor import type_text
                                 type_text(recognized_text)
                                 time.sleep(0.5)  # Biraz bekleme
                             except Exception as e:
                                 self.logger.error(f"Error in dictation typing: {e}")
-                                print(f"Metin yazılırken hata: {e}")
+                                print(f"Metin yazilirken hata: {e}")
                             continue
                         
                         # Process regular commands
@@ -274,7 +274,7 @@ class VoiceCommandListener:
                                 break
                         except Exception as cmd_error:
                             self.logger.error(f"Command execution error: {cmd_error}")
-                            print(f"Komut çalıştırılırken hata: {cmd_error}")
+                            print(f"Komut çaliştirilirken hata: {cmd_error}")
                             consecutive_errors += 1
                             
                     except sr.UnknownValueError:
@@ -299,7 +299,7 @@ class VoiceCommandListener:
                     # Arka arkaya çok fazla hata olursa yeniden başlat
                     if consecutive_errors >= max_consecutive_errors:
                         self.logger.warning(f"Too many consecutive errors ({consecutive_errors}). Reinitializing...")
-                        print(f"Çok fazla arka arkaya hata oluştu. Mikrofon yeniden başlatılıyor...")
+                        print(f"Çok fazla arka arkaya hata oluştu. Mikrofon yeniden başlatiliyor...")
                         # Mikrofonla ilgili sorun olabilir, yeniden başlat
                         break
         
@@ -312,11 +312,11 @@ class VoiceCommandListener:
             self.logger.error(f"Fatal error: {e}")
             self.is_running = False
         
-        # Aşırı hata durumunda recursive olarak yeniden başlatma
+        # Aşiri hata durumunda recursive olarak yeniden başlatma
         if consecutive_errors >= max_consecutive_errors and self.is_running:
-            print("Yeniden başlatılıyor...")
+            print("Yeniden başlatiliyor...")
             self.logger.info("Restarting voice command listener after errors")
-            time.sleep(1)  # Kısa bir bekleme
+            time.sleep(1)  # Kisa bir bekleme
             return self.listen()  # Recursive olarak yeniden başlat
             
         return 0

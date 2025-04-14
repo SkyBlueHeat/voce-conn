@@ -48,51 +48,51 @@ try:
         'home': 0x24, 'end': 0x23, 'pageup': 0x21, 'pagedown': 0x22
     }
     
-    # Türkçe karakter mappings
+    # Turkçe karakter mappings
     TURKISH_KEY_MAPPING = {
         'ç': 0xBA,  # ç için virtual key code
         'ğ': 0xDE,  # ğ için virtual key code
-        'ı': 0xDB,  # ı için virtual key code
-        'ö': 0xC0,  # ö için virtual key code
+        'i': 0xDB,  # i için virtual key code
+        'o': 0xC0,  # o için virtual key code
         'ş': 0xDC,  # ş için virtual key code
-        'ü': 0xDD,  # ü için virtual key code
-        'İ': 0xDB,  # İ (büyük ı) için virtual key code - SHIFT ile kullanılır
+        'u': 0xDD,  # u için virtual key code
+        'İ': 0xDB,  # İ (buyuk i) için virtual key code - SHIFT ile kullanilir
     }
     
-    # Genişletilmiş tuş haritası - daha fazla sembol ve karakter
+    # Genişletilmiş tuş haritasi - daha fazla sembol ve karakter
     EXTENDED_KEY_MAPPING = {
         # Noktalama işaretleri
         '.': 0xBE,  # Nokta
-        ',': 0xBC,  # Virgül
-        ';': 0xBA,  # Noktalı virgül (bazı klavyelerde)
-        ':': 0xBA,  # İki nokta üst üste (SHIFT + ;)
-        "'": 0xDE,  # Tek tırnak
-        '"': 0xDE,  # Çift tırnak (SHIFT + ')
-        '/': 0xBF,  # Bölü
+        ',': 0xBC,  # Virgul
+        ';': 0xBA,  # Noktali virgul (bazi klavyelerde)
+        ':': 0xBA,  # İki nokta ust uste (SHIFT + ;)
+        "'": 0xDE,  # Tek tirnak
+        '"': 0xDE,  # Çift tirnak (SHIFT + ')
+        '/': 0xBF,  # Bolu
         '\\': 0xDC,  # Ters slash
-        '[': 0xDB,  # Köşeli parantez aç
-        ']': 0xDD,  # Köşeli parantez kapat
-        '{': 0xDB,  # Süslü parantez aç (SHIFT + [)
-        '}': 0xDD,  # Süslü parantez kapat (SHIFT + ])
+        '[': 0xDB,  # Koşeli parantez aç
+        ']': 0xDD,  # Koşeli parantez kapat
+        '{': 0xDB,  # Suslu parantez aç (SHIFT + [)
+        '}': 0xDD,  # Suslu parantez kapat (SHIFT + ])
         '(': 0x39,  # Parantez aç (SHIFT + 9)
         ')': 0x30,  # Parantez kapat (SHIFT + 0)
         '-': 0xBD,  # Eksi
         '_': 0xBD,  # Alt çizgi (SHIFT + -)
-        '+': 0xBB,  # Artı (SHIFT + =)
+        '+': 0xBB,  # Arti (SHIFT + =)
         '=': 0xBB,  # Eşittir
         '`': 0xC0,  # Backtick
         '~': 0xC0,  # Tilde (SHIFT + `)
-        '!': 0x31,  # Ünlem (SHIFT + 1)
+        '!': 0x31,  # unlem (SHIFT + 1)
         '@': 0x32,  # At işareti (SHIFT + 2)
         '#': 0x33,  # Diyez (SHIFT + 3)
         '$': 0x34,  # Dolar (SHIFT + 4)
-        '%': 0x35,  # Yüzde (SHIFT + 5)
+        '%': 0x35,  # Yuzde (SHIFT + 5)
         '^': 0x36,  # Şapka (SHIFT + 6)
         '&': 0x37,  # Ve işareti (SHIFT + 7)
-        '*': 0x38,  # Yıldız (SHIFT + 8)
+        '*': 0x38,  # Yildiz (SHIFT + 8)
         '?': 0xBF,  # Soru işareti (SHIFT + /)
         
-        # Fonksiyon tuşları
+        # Fonksiyon tuşlari
         'f1': 0x70,
         'f2': 0x71,
         'f3': 0x72,
@@ -106,7 +106,7 @@ try:
         'f11': 0x7A,
         'f12': 0x7B,
         
-        # Medya ve kontrol tuşları
+        # Medya ve kontrol tuşlari
         'volumeup': VK_VOLUME_UP,
         'volumedown': VK_VOLUME_DOWN,
         'mute': VK_VOLUME_MUTE,
@@ -114,7 +114,7 @@ try:
         'nexttrack': VK_MEDIA_NEXT_TRACK,
         'prevtrack': VK_MEDIA_PREV_TRACK,
         
-        # Alt, Ctrl, Win tuşları
+        # Alt, Ctrl, Win tuşlari
         'alt': 0x12,
         'ctrl': 0x11,
         'control': 0x11,
@@ -122,7 +122,7 @@ try:
         'windows': 0x5B,
         'shift': VK_SHIFT,
         
-        # Diğer özel tuşlar
+        # Diğer ozel tuşlar
         'printscrn': 0x2C,
         'scrolllock': 0x91,
         'pause': 0x13,
@@ -132,7 +132,7 @@ try:
         'numlock': 0x90,
     }
     
-    # KEY_MAPPING'i Türkçe karakterlerle ve genişletilmiş tuşlarla birleştir
+    # KEY_MAPPING'i Turkçe karakterlerle ve genişletilmiş tuşlarla birleştir
     KEY_MAPPING.update(TURKISH_KEY_MAPPING)
     KEY_MAPPING.update(EXTENDED_KEY_MAPPING)
     
@@ -244,13 +244,13 @@ try:
             # Small delay between sequences
             time.sleep(0.1)
     
-    # Yeni fonksiyon: Konuşulan herhangi bir metni yazdırma
+    # Yeni fonksiyon: Konuşulan herhangi bir metni yazdirma
     def type_text(text):
-        """Metni harf harf yazdır"""
+        """Metni harf harf yazdir"""
         if not text:
             return
             
-        print(f"Yazılacak metin: {text}")
+        print(f"Yazilacak metin: {text}")
         
         # Metin içindeki her karakter için
         for char in text:
@@ -259,19 +259,19 @@ try:
                 press_key_combination('space')
                 continue
             
-            # Yeni özel semboller ve özel işaretler için daha akıllı işleme
+            # Yeni ozel semboller ve ozel işaretler için daha akilli işleme
             needs_shift = False
             key_char = char.lower()
             
-            # Büyük harf kontrolü
+            # Buyuk harf kontrolu
             if char.isupper():
                 needs_shift = True
                 
-            # Shift gerektiren özel semboller kontrolü
+            # Shift gerektiren ozel semboller kontrolu
             if char in ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '|', ':', '"', '<', '>', '?', '~']:
                 needs_shift = True
                 
-                # Shift ile basılması gereken sembollerin alt tuşlarını bul
+                # Shift ile basilmasi gereken sembollerin alt tuşlarini bul
                 if char == '!': key_char = '1'
                 elif char == '@': key_char = '2'
                 elif char == '#': key_char = '3'
@@ -294,12 +294,12 @@ try:
                 elif char == '?': key_char = '/'
                 elif char == '~': key_char = '`'
             
-            # Karakter KEY_MAPPING'de var mı kontrol et
+            # Karakter KEY_MAPPING'de var mi kontrol et
             if key_char in KEY_MAPPING:
                 key_code = KEY_MAPPING[key_char]
                 
                 if needs_shift:
-                    # SHIFT tuşunu basılı tut
+                    # SHIFT tuşunu basili tut
                     extra = ctypes.c_ulong(0)
                     ii_ = InputUnion()
                     ii_.ki = KeyboardInput(VK_SHIFT, 0, 0, 0, ctypes.pointer(extra))
@@ -309,7 +309,7 @@ try:
                     # Karakteri yaz
                     press_key(key_code)
                     
-                    # SHIFT tuşunu bırak
+                    # SHIFT tuşunu birak
                     ii_.ki = KeyboardInput(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0, ctypes.pointer(extra))
                     x = Input(KEYBOARD_EVENT, ii_)
                     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
@@ -317,42 +317,42 @@ try:
                     # Karakteri doğrudan yaz
                     press_key(key_code)
             else:
-                # Önceden tanımlanmamış bir karakter, unicode değerini kullanarak yazmayı dene
+                # onceden tanimlanmamiş bir karakter, unicode değerini kullanarak yazmayi dene
                 try:
-                    # Alt tuşunu basılı tut
+                    # Alt tuşunu basili tut
                     extra = ctypes.c_ulong(0)
                     ii_ = InputUnion()
                     ii_.ki = KeyboardInput(0x12, 0, 0, 0, ctypes.pointer(extra))  # 0x12 = ALT
                     x = Input(KEYBOARD_EVENT, ii_)
                     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
                     
-                    # Unicode değerine göre Alt+Numpad kombinasyonu bas
+                    # Unicode değerine gore Alt+Numpad kombinasyonu bas
                     unicode_value = ord(char)
                     numpad_sequence = str(unicode_value)
                     
                     for digit in numpad_sequence:
-                        # Numpad tuşları için keycodes: 0x60-0x69 (Numpad 0-9)
+                        # Numpad tuşlari için keycodes: 0x60-0x69 (Numpad 0-9)
                         numpad_key = 0x60 + int(digit)
                         press_key(numpad_key)
                     
-                    # Alt tuşunu bırak
+                    # Alt tuşunu birak
                     ii_.ki = KeyboardInput(0x12, 0, KEYEVENTF_KEYUP, 0, ctypes.pointer(extra))
                     x = Input(KEYBOARD_EVENT, ii_)
                     SendInput(1, ctypes.pointer(x), ctypes.sizeof(x))
                 except Exception as e:
-                    print(f"Bilinmeyen karakter yazılırken hata: {char} - {e}")
+                    print(f"Bilinmeyen karakter yazilirken hata: {char} - {e}")
             
-            # Karakterler arası kısa bir bekleme ekle
+            # Karakterler arasi kisa bir bekleme ekle
             time.sleep(0.05)
     
     HAS_MEDIA_KEYS = True
 except:
     HAS_MEDIA_KEYS = False
     def press_key_combination(keys):
-        print(f"Tuş simülasyonu yapılamadı: {keys}")
+        print(f"Tuş simulasyonu yapilamadi: {keys}")
     
     def type_text(text):
-        print(f"Metin yazdırma simülasyonu yapılamadı: {text}")
+        print(f"Metin yazdirma simulasyonu yapilamadi: {text}")
 
 # Text to speech is handled by imported module
 
@@ -364,26 +364,26 @@ class CommandExecutor:
         self.debug_mode = debug_mode
         self.commands = {}
         self.categories = {}
-        self.command_cache = {}  # Komut önbelleği
+        self.command_cache = {}  # Komut onbelleği
         self.cache_hits = 0
         self.cache_misses = 0
         self.execution_callback = execution_callback
         self.exit_requested = False
         self.use_voice_feedback = os.getenv('VOICE_FEEDBACK', 'true').lower() == 'true'
         
-        # Bağlam farkındalığı için ekler
+        # Bağlam farkindaliği için ekler
         self.current_context = {
             "active_app": None,  # Şu anda aktif olan uygulama
-            "previous_command": None,  # Son çalıştırılan komut
+            "previous_command": None,  # Son çaliştirilan komut
             "last_category": None,  # Son komut kategorisi
-            "last_action": None,  # Son yapılan eylem
+            "last_action": None,  # Son yapilan eylem
             "fullscreen_active": False,  # Tam ekran durumu
             "media_playing": False,  # Medya oynatma durumu
-            "browser_tabs": {},  # Tarayıcı sekmeleri ve içerikleri
+            "browser_tabs": {},  # Tarayici sekmeleri ve içerikleri
             "command_history": []  # Son 5 komutu saklayacak liste
         }
         
-        # Komutları yükle
+        # Komutlari yukle
         self._load_commands()
         
         # Initialize TTS engine if voice feedback is enabled
@@ -414,19 +414,19 @@ class CommandExecutor:
             }
     
     def _find_similar_commands(self, text):
-        """Benzer komutları bulan yardımcı fonksiyon"""
+        """Benzer komutlari bulan yardimci fonksiyon"""
         similar_commands = []
         
-        # Metni küçük harflere çevir ve Türkçe karakterleri standartlaştır
+        # Metni kuçuk harflere çevir ve Turkçe karakterleri standartlaştir
         normalized_text = self._normalize_turkish_text(text.lower())
         words = normalized_text.split()
         
-        # Hem komut anahtarından hem de kategoriden aramak için tüm kategorileri döngüye al
+        # Hem komut anahtarindan hem de kategoriden aramak için tum kategorileri donguye al
         for category, commands in self.commands.items():
             for cmd_key in commands:
                 normalized_cmd = self._normalize_turkish_text(cmd_key.lower())
                 
-                # Kelime bazlı eşleşme puanı hesapla
+                # Kelime bazli eşleşme puani hesapla
                 score = 0
                 cmd_words = normalized_cmd.split()
                 
@@ -434,32 +434,32 @@ class CommandExecutor:
                 for word in words:
                     if word in normalized_cmd:
                         score += 1
-                    # Kelime benzerliği için kısmi eşleşme
+                    # Kelime benzerliği için kismi eşleşme
                     else:
                         for cmd_word in cmd_words:
                             if len(word) > 3 and len(cmd_word) > 3:
-                                # En az 3 karakter benzerliği aranıyor
+                                # En az 3 karakter benzerliği araniyor
                                 if word[:3] == cmd_word[:3]:
                                     score += 0.5
                                     break
                 
-                # Puanı kelime sayısına göre normalize et
+                # Puani kelime sayisina gore normalize et
                 if len(words) > 0:
                     normalized_score = score / len(words)
                     
-                    # Belirli bir eşik değerini geçen komutları ekle
+                    # Belirli bir eşik değerini geçen komutlari ekle
                     if normalized_score > 0.5:
                         similar_commands.append((normalized_score, f"{category}: {cmd_key}"))
         
-        # Puanlara göre sırala ve sadece komut metinlerini döndür
+        # Puanlara gore sirala ve sadece komut metinlerini dondur
         return [cmd for _, cmd in sorted(similar_commands, key=lambda x: x[0], reverse=True)]
     
     def _normalize_turkish_text(self, text):
-        """Türkçe metni normalleştir - arama için karakterleri standartlaştır"""
+        """Turkçe metni normalleştir - arama için karakterleri standartlaştir"""
         text = text.lower()
-        # Türkçe karakterleri İngilizce karşılıklarına dönüştür (arama için)
+        # Turkçe karakterleri İngilizce karşiliklarina donuştur (arama için)
         replace_map = {
-            'ç': 'c', 'ğ': 'g', 'ı': 'i', 'ö': 'o', 'ş': 's', 'ü': 'u',
+            'ç': 'c', 'ğ': 'g', 'i': 'i', 'o': 'o', 'ş': 's', 'u': 'u',
             'â': 'a', 'î': 'i', 'û': 'u'
         }
         for tr_char, en_char in replace_map.items():
@@ -468,7 +468,7 @@ class CommandExecutor:
         
     def find_matching_command(self, text):
         """Find a matching command for the given text"""
-        # Önce tam komut eşleşmesi ara
+        # once tam komut eşleşmesi ara
         for category, commands in self.commands.items():
             for cmd_key, cmd_action in commands.items():
                 if cmd_key.lower() == text.lower():
@@ -482,15 +482,15 @@ class CommandExecutor:
         
         text_lower = text.lower()
         
-        # Özel durum: "X için arama yap" formülündeki komutlar
-        search_markers = ["ara", "arama yap", "bul", "göster"]
+        # ozel durum: "X için arama yap" formulundeki komutlar
+        search_markers = ["ara", "arama yap", "bul", "goster"]
         search_command = None
         search_category = None
         search_query = None
         
         for marker in search_markers:
             if marker in text_lower:
-                # Metni parçalara ayırarak arama sorgusunu ve komut kısmını tespit et
+                # Metni parçalara ayirarak arama sorgusunu ve komut kismini tespit et
                 parts = text_lower.split(marker, 1)
                 if len(parts) == 2:
                     before_marker = parts[0].strip()
@@ -501,7 +501,7 @@ class CommandExecutor:
                         if category == "web":
                             for cmd_key, cmd_action in commands.items():
                                 if marker in cmd_key:
-                                    # Arama kategorisini ve ne aramalı belirlemeye çalış
+                                    # Arama kategorisini ve ne aramali belirlemeye çaliş
                                     if before_marker:
                                         if before_marker in cmd_key:
                                             search_command = cmd_key
@@ -522,11 +522,11 @@ class CommandExecutor:
         # Eğer arama komutu tespit edildiyse, onu kullan
         if search_command and search_category and search_query:
             cmd_action = self.commands[search_category][search_command]
-            # Özel arama URL'sini oluştur
+            # ozel arama URL'sini oluştur
             import urllib.parse
             search_encoded = urllib.parse.quote(search_query)
             
-            # URL sonunda "?q=" varsa oraya ekle, yoksa "?q=" ekleyip öyle ekle
+            # URL sonunda "?q=" varsa oraya ekle, yoksa "?q=" ekleyip oyle ekle
             if "?q=" in cmd_action:
                 new_action = cmd_action.split("?q=")[0] + "?q=" + search_encoded
             else:
@@ -548,11 +548,11 @@ class CommandExecutor:
                         best_match_category = category
                         best_match_action = cmd_action
                 
-                # Medya komutları için özel eşleşme: "filmi duraklat" -> "duraklat"
+                # Medya komutlari için ozel eşleşme: "filmi duraklat" -> "duraklat"
                 elif category in ["medya", "netflix", "youtube"]:
                     # Ekstraktif eşleşme yap, metinde komutun her kelimesi varsa eşleştir
                     cmd_words = cmd_key_lower.split()
-                    # Kelimelerin büyük çoğunluğu varsa eşleşme kabul et
+                    # Kelimelerin buyuk çoğunluğu varsa eşleşme kabul et
                     matches = sum(1 for word in cmd_words if word in text_lower)
                     match_ratio = matches / len(cmd_words) if cmd_words else 0
                     
@@ -573,14 +573,14 @@ class CommandExecutor:
                     cmd_key_lower = cmd_key.lower()
                     cmd_words = cmd_key_lower.split()
                     
-                    # Ortak kelime sayısı
+                    # Ortak kelime sayisi
                     common_words = len(set(text_words) & set(cmd_words))
                     
-                    # Metindeki ve komuttaki kelime sayısına göre oran
+                    # Metindeki ve komuttaki kelime sayisina gore oran
                     if common_words > 0:
                         match_ratio = common_words / len(cmd_words)
                         
-                        # En az %50 oranda kelime eşleşmesi olmalı
+                        # En az %50 oranda kelime eşleşmesi olmali
                         if match_ratio >= 0.5 and len(cmd_key) > best_match_len:
                             best_match = cmd_key
                             best_match_len = len(cmd_key)
@@ -598,45 +598,45 @@ class CommandExecutor:
         if not recognized_text:
             return False
             
-        # Komut geçmişine ekle (en fazla 5 komut saklansın)
+        # Komut geçmişine ekle (en fazla 5 komut saklansin)
         self.current_context["command_history"].insert(0, recognized_text)
         if len(self.current_context["command_history"]) > 5:
             self.current_context["command_history"].pop()
             
-        # Çıkış komutları kontrolü
-        exit_commands = ["çık", "kapat", "programı kapat", "asistanı kapat", "uygulamayı kapat", "exit", "quit"]
+        # Çikiş komutlari kontrolu
+        exit_commands = ["çik", "kapat", "programi kapat", "asistani kapat", "uygulamayi kapat", "exit", "quit"]
         for cmd in exit_commands:
             if cmd in recognized_text.lower():
-                print("Çıkış komutu algılandı. Program kapatılıyor...")
+                print("Çikiş komutu algilandi. Program kapatiliyor...")
                 if self.use_voice_feedback:
-                    speak_text("Asistan kapatılıyor")
+                    speak_text("Asistan kapatiliyor")
                 self.exit_requested = True
                 return True
         
-        # Özel kontroller
+        # ozel kontroller
         if "konuşma modu" in recognized_text.lower() and "kapat" in recognized_text.lower():
-            print("Konuşma modu kapatılıyor...")
+            print("Konuşma modu kapatiliyor...")
             return True
             
-        # Önce önbellekte komut var mı kontrol et
+        # once onbellekte komut var mi kontrol et
         if recognized_text in self.command_cache:
             self.cache_hits += 1
             if self.debug_mode:
-                print(f"Önbellek kullanılıyor: {recognized_text}")
+                print(f"onbellek kullaniliyor: {recognized_text}")
             category, cmd_key, cmd_action = self.command_cache[recognized_text]
             return self._execute_command(category, cmd_key, cmd_action, recognized_text)
             
         self.cache_misses += 1
             
-        # Komutu bul ve yürüt
+        # Komutu bul ve yurut
         category, cmd_key, cmd_action = self.find_matching_command(recognized_text)
                 
         if not category or not cmd_key or not cmd_action:
-            # Bağlam tabanlı akıllı karar verme
+            # Bağlam tabanli akilli karar verme
             if self._try_context_based_execution(recognized_text):
                 return True
             
-            # Benzer komutları bul
+            # Benzer komutlari bul
             similar_commands = self._find_similar_commands(recognized_text)
             if similar_commands and self.debug_mode:
                 print("Benzer komutlar bulundu:")
@@ -644,29 +644,38 @@ class CommandExecutor:
                     print(f" - {sim_cmd}")
                     
                 if self.use_voice_feedback:
-                    speak_text("Bu komutu anlamadım")
+                    speak_text("Bu komutu anlamadim")
                 return False
             
-        # Önbelleğe ekle
+        # onbelleğe ekle
         self.command_cache[recognized_text] = (category, cmd_key, cmd_action)
         
-        # Komutu yürüt
+        # Komutu yurut
         return self._execute_command(category, cmd_key, cmd_action, recognized_text)
     
     def _execute_command(self, category, cmd_key, cmd_action, original_text):
         """Execute a command with the given parameters and update context"""
         try:
-            # Bağlam bilgisini güncelle
+            # Bağlam bilgisini guncelle
             self.current_context["previous_command"] = original_text
             self.current_context["last_category"] = category
             self.current_context["last_action"] = cmd_action
             
-            # Komut gerçekleştirme kategoriye göre farklılaşabilir
+            # Komut gerçekleştirme kategoriye gore farklilaşabilir
             result = False
             
-            # Tarayıcı sekmesi komutu ise bağlam güncellemesi yap
+            # Selamlama komutları için özel işleme
+            if cmd_action == "noop+greeting":
+                if self.use_voice_feedback:
+                    from text_to_speech import greet
+                    speak_text(greet())
+                if self.execution_callback:
+                    self.execution_callback(True, "Selamlama yanıtlandı")
+                return True
+            
+            # Tarayici sekmesi komutu ise bağlam guncellemesi yap
             if category == "chrome" and "sekme" in cmd_key.lower():
-                # Tab numarasını belirle
+                # Tab numarasini belirle
                 tab_match = re.search(r'(\d+)', cmd_key)
                 if tab_match:
                     tab_number = int(tab_match.group(1))
@@ -678,24 +687,24 @@ class CommandExecutor:
             elif "simulateKey:f" in cmd_action:
                 self.current_context["fullscreen_active"] = not self.current_context["fullscreen_active"]
                 
-            # Uygulama başlatma durumunda aktif uygulamayı güncelle
+            # Uygulama başlatma durumunda aktif uygulamayi guncelle
             if category == "uygulamalar" and "aç" in cmd_key:
                 app_name = cmd_key.replace(" aç", "")
                 self.current_context["active_app"] = app_name
                 
-            # Medya key komutları için
+            # Medya key komutlari için
             if category == "medya" or cmd_action in ["volumeup", "volumedown", "volumemute"]:
                 result = self._handle_media_command(cmd_action)
-                time.sleep(0.7)  # Medya komutları sonrası bekle
+                time.sleep(0.7)  # Medya komutlari sonrasi bekle
                 if self.use_voice_feedback:
-                    speak_text(f"{cmd_key} komutu çalıştırıldı")
+                    speak_text(f"{cmd_key} komutu çaliştirildi")
                 return result
             
-            # Chrome sekme komutları
+            # Chrome sekme komutlari
             if category == "chrome" and cmd_action.startswith("noop+simulateKey:"):
                 keys = cmd_action.replace("noop+simulateKey:", "")
                 if self.debug_mode:
-                    print(f"Chrome sekme komutunu çalıştırıyorum: {keys}")
+                    print(f"Chrome sekme komutunu çaliştiriyorum: {keys}")
                 
                 press_key_combination(keys)
                 time.sleep(0.5)
@@ -704,43 +713,43 @@ class CommandExecutor:
                     self.execution_callback(True, "Sekme değiştirildi")
                 
                 if self.use_voice_feedback:
-                    speak_text(f"{cmd_key} komutu uygulandı")
+                    speak_text(f"{cmd_key} komutu uygulandi")
                 
                 return True
                 
-            # Normal sistem komutları
+            # Normal sistem komutlari
             result = self._execute_system_command(cmd_action)
             time.sleep(0.5)
             
             if self.use_voice_feedback:
-                speak_text(f"{cmd_key} komutu çalıştırıldı")
+                speak_text(f"{cmd_key} komutu çaliştirildi")
             return result
                 
         except Exception as e:
-            print(f"Komut çalıştırılırken hata: {e}")
+            print(f"Komut çaliştirilirken hata: {e}")
             if self.execution_callback:
                 self.execution_callback(False, f"Hata: {str(e)}")
             if self.use_voice_feedback:
-                speak_text("Komut çalıştırılırken bir hata oluştu")
+                speak_text("Komut çaliştirilirken bir hata oluştu")
             return False
     
     def _try_context_based_execution(self, text):
-        """Bağlam bilgisine göre komutları akıllıca yorumla"""
+        """Bağlam bilgisine gore komutlari akillica yorumla"""
         try:
             # Tam ekran ile ilgili komutlar
             if "tam ekran" in text.lower():
-                if "çık" in text.lower() or "kapat" in text.lower():
+                if "çik" in text.lower() or "kapat" in text.lower():
                     if self.current_context["fullscreen_active"]:
-                        # Tam ekrandan çıkma işlemi - 'f' tuşu ile
+                        # Tam ekrandan çikma işlemi - 'f' tuşu ile
                         press_key_combination("f")
                         self.current_context["fullscreen_active"] = False
-                        speak_text("Tam ekrandan çıkıldı")
+                        speak_text("Tam ekrandan çikildi")
                         return True
                 elif self.current_context["active_app"] in ["chrome", "netflix", "youtube"]:
                     # Tam ekran yapma işlemi
                     press_key_combination("f")
                     self.current_context["fullscreen_active"] = True
-                    speak_text("Tam ekran yapıldı")
+                    speak_text("Tam ekran yapildi")
                     return True
             
             # Sekme ile ilgili komutlar
@@ -748,51 +757,51 @@ class CommandExecutor:
                 tab_match = re.search(r'(\d+)', text)
                 if tab_match:
                     tab_number = int(tab_match.group(1))
-                    if 0 < tab_number < 10:  # 1-9 arası sekmelere geçiş
+                    if 0 < tab_number < 10:  # 1-9 arasi sekmelere geçiş
                         press_key_combination(f"ctrl+{tab_number}")
                         self.current_context["browser_tabs"]["active_tab"] = tab_number
                         speak_text(f"Sekme {tab_number}'e geçildi")
                         return True
             
-            # "Filmi/videoyu başlat" gibi medya komutları
+            # "Filmi/videoyu başlat" gibi medya komutlari
             if any(word in text.lower() for word in ["film", "video", "dizi"]) and any(word in text.lower() for word in ["başlat", "oynat", "devam"]):
-                press_key_combination("space")  # Space tuşu genellikle oynat/duraklat işlevi görür
+                press_key_combination("space")  # Space tuşu genellikle oynat/duraklat işlevi gorur
                 self.current_context["media_playing"] = True
-                speak_text("Medya başlatıldı")
+                speak_text("Medya başlatildi")
                 return True
                 
-            # "Filmi/videoyu durdur" gibi medya komutları
+            # "Filmi/videoyu durdur" gibi medya komutlari
             if any(word in text.lower() for word in ["film", "video", "dizi"]) and any(word in text.lower() for word in ["durdur", "duraklat", "dur"]):
                 press_key_combination("space")
                 self.current_context["media_playing"] = False
-                speak_text("Medya duraklatıldı")
+                speak_text("Medya duraklatildi")
                 return True
                 
-            # Önceki komut bağlamını kullan
+            # onceki komut bağlamini kullan
             if self.current_context["last_category"] and "tekrar" in text.lower():
-                # Önceki komutu tekrar çalıştır
+                # onceki komutu tekrar çaliştir
                 prev_cmd = self.current_context["previous_command"]
                 if prev_cmd:
-                    speak_text(f"Son komutu tekrarlıyorum: {prev_cmd}")
+                    speak_text(f"Son komutu tekrarliyorum: {prev_cmd}")
                     return self.execute(prev_cmd)
                     
             return False
             
         except Exception as e:
-            print(f"Bağlam tabanlı yürütme hatası: {e}")
+            print(f"Bağlam tabanli yurutme hatasi: {e}")
             return False
     
     def _handle_media_command(self, cmd_action):
         """Handle media key commands with more reliable execution"""
         try:
             if cmd_action == "volumeup":
-                for _ in range(3):  # 3 kez basarak daha belirgin artış sağla
+                for _ in range(3):  # 3 kez basarak daha belirgin artiş sağla
                     win32api.keybd_event(VK_VOLUME_UP, 0, 0, 0)
                     time.sleep(0.05)
                     win32api.keybd_event(VK_VOLUME_UP, 0, KEYEVENTF_KEYUP, 0)
                     time.sleep(0.1)
             elif cmd_action == "volumedown":
-                for _ in range(3):  # 3 kez basarak daha belirgin azalış sağla
+                for _ in range(3):  # 3 kez basarak daha belirgin azaliş sağla
                     win32api.keybd_event(VK_VOLUME_DOWN, 0, 0, 0)
                     time.sleep(0.05)
                     win32api.keybd_event(VK_VOLUME_DOWN, 0, KEYEVENTF_KEYUP, 0)
@@ -806,7 +815,7 @@ class CommandExecutor:
                 win32api.keybd_event(VK_MEDIA_PLAY_PAUSE, 0, 0, 0)
                 time.sleep(0.05)
                 win32api.keybd_event(VK_MEDIA_PLAY_PAUSE, 0, KEYEVENTF_KEYUP, 0)
-                # Space tuşu kullanımı kaldırıldı - soruna neden oluyordu
+                # Space tuşu kullanimi kaldirildi - soruna neden oluyordu
             elif cmd_action == "medianext":
                 win32api.keybd_event(VK_MEDIA_NEXT_TRACK, 0, 0, 0)
                 time.sleep(0.05)
@@ -817,9 +826,9 @@ class CommandExecutor:
                 win32api.keybd_event(VK_MEDIA_PREV_TRACK, 0, KEYEVENTF_KEYUP, 0)
             
             if self.execution_callback:
-                self.execution_callback(True, "Medya komutu uygulandı")
+                self.execution_callback(True, "Medya komutu uygulandi")
             
-            # Medya komutları sonrası biraz daha bekleyerek uygulamaların yanıt vermesine izin ver
+            # Medya komutlari sonrasi biraz daha bekleyerek uygulamalarin yanit vermesine izin ver
             time.sleep(0.5)
             return True
         except Exception as e:
@@ -858,10 +867,10 @@ class CommandExecutor:
             threading.Thread(target=run_command, daemon=True).start()
             
             if self.execution_callback:
-                self.execution_callback(True, "Komut çalıştırıldı")
+                self.execution_callback(True, "Komut çaliştirildi")
             return True
         except Exception as e:
-            print(f"Sistem komutu çalıştırılırken hata: {e}")
+            print(f"Sistem komutu çaliştirilirken hata: {e}")
             return False
     
     def print_cache_stats(self):
@@ -869,5 +878,5 @@ class CommandExecutor:
         total = self.cache_hits + self.cache_misses
         if total > 0:
             hit_rate = (self.cache_hits / total) * 100
-            print(f"Önbellek istatistikleri: {self.cache_hits} hit, {self.cache_misses} miss, {hit_rate:.1f}% hit rate")
-            print(f"Önbellek boyutu: {len(self.command_cache)} komut")
+            print(f"onbellek istatistikleri: {self.cache_hits} hit, {self.cache_misses} miss, {hit_rate:.1f}% hit rate")
+            print(f"onbellek boyutu: {len(self.command_cache)} komut")

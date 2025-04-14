@@ -1,4 +1,4 @@
 @echo off
-echo Sesli Asistan Kurulum Aracı
+echo Sesli Asistan Kurulum Araci
 python setup.py
 pause 

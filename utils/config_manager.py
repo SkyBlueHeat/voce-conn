@@ -1,5 +1,5 @@
 """
-Konfigürasyon Yöneticisi
+Konfigurasyon Yöneticisi
 """
 import os
 import json
@@ -7,12 +7,12 @@ from dotenv import load_dotenv, set_key
 
 class ConfigManager:
     """
-    Sesli asistan için ayarları yöneten sınıf
-    .env dosyasıyla etkileşim kurar
+    Sesli asistan için ayarlari yöneten sinif
+    .env dosyasiyla etkileşim kurar
     """
     def __init__(self, env_file=".env", commands_file="komutlar.json"):
         """
-        Konfigürasyon yöneticisini başlatır
+        Konfigurasyon yöneticisini başlatir
         
         Args:
             env_file: .env dosya yolu
@@ -21,19 +21,19 @@ class ConfigManager:
         self.env_file = env_file
         self.commands_file = commands_file
         
-        # Varsayılan ayarları yükle
+        # Varsayilan ayarlari yukle
         load_dotenv(self.env_file)
         
-        # Komutları yükle
+        # Komutlari yukle
         self.commands = self._load_commands()
         
     def get_setting(self, key, default=None):
         """
-        .env'den bir ayar değeri alır
+        .env'den bir ayar değeri alir
         
         Args:
-            key: Ayar anahtarı
-            default: Değer bulunamazsa dönecek varsayılan değer
+            key: Ayar anahtari
+            default: Değer bulunamazsa dönecek varsayilan değer
         
         Returns:
             Ayar değeri veya default değeri
@@ -43,17 +43,17 @@ class ConfigManager:
         
     def save_setting(self, key, value):
         """
-        .env dosyasına bir ayar değeri kaydeder
+        .env dosyasina bir ayar değeri kaydeder
         
         Args:
-            key: Ayar anahtarı
+            key: Ayar anahtari
             value: Ayar değeri
             
         Returns:
-            bool: İşlem başarılı mı?
+            bool: İşlem başarili mi?
         """
         try:
-            # .env dosyasına yaz
+            # .env dosyasina yaz
             set_key(self.env_file, key, str(value))
             return True
         except Exception as e:
@@ -62,10 +62,10 @@ class ConfigManager:
     
     def get_all_settings(self):
         """
-        Tüm ayarları sözlük olarak döndürür
+        Tum ayarlari sözluk olarak döndurur
         
         Returns:
-            dict: Tüm ayar anahtar-değer çiftleri
+            dict: Tum ayar anahtar-değer çiftleri
         """
         settings = {}
         for key in ["WAKE_WORD", "VOICE_FEEDBACK", "TTS_ENGINE", 
@@ -76,16 +76,16 @@ class ConfigManager:
     
     def _load_commands(self):
         """
-        Komutlar dosyasını yükler
+        Komutlar dosyasini yukler
         
         Returns:
-            dict: Komutlar sözlüğü
+            dict: Komutlar sözluğu
         """
         try:
             with open(self.commands_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"Komutlar yüklenemedi: {e}")
+            print(f"Komutlar yuklenemedi: {e}")
             return {
                 "uygulamalar": {},
                 "sistem": {},
@@ -95,7 +95,7 @@ class ConfigManager:
             
     def get_all_commands(self):
         """
-        Tüm komutları kategorilere göre döndürür
+        Tum komutlari kategorilere göre döndurur
         
         Returns:
             dict: Komutlar
@@ -104,7 +104,7 @@ class ConfigManager:
         
     def get_commands_by_category(self, category):
         """
-        Belirli kategorideki komutları döndürür
+        Belirli kategorideki komutlari döndurur
         
         Args:
             category: Komut kategorisi (uygulamalar, sistem, medya, asistan)

@@ -22,11 +22,11 @@ class WakeWordListener:
         """Initialize Porcupine wake word detection engine"""
         try:
             if not self.access_key:
-                print("Erişim anahtarı bulunamadı. Lütfen .env dosyasında PORCUPINE_ACCESS_KEY ayarını yapın.")
-                print("Ücretsiz bir anahtar almak için: https://console.picovoice.ai/")
+                print("Erişim anahtari bulunamadi. Lutfen .env dosyasinda PORCUPINE_ACCESS_KEY ayarini yapin.")
+                print("ucretsiz bir anahtar almak için: https://console.picovoice.ai/")
                 return False
             
-            print(f"Porcupine başlatılıyor: keyword={self.wake_word}, access_key={self.access_key[:5]}...")
+            print(f"Porcupine başlatiliyor: keyword={self.wake_word}, access_key={self.access_key[:5]}...")
             
             # Try to create Porcupine with the provided keyword
             try:
@@ -35,7 +35,7 @@ class WakeWordListener:
                     keywords=[self.wake_word],
                     sensitivities=[self.sensitivity]
                 )
-                print("Porcupine başarıyla oluşturuldu.")
+                print("Porcupine başariyla oluşturuldu.")
             except Exception as e:
                 # If that fails, try with known keywords
                 print(f"Standart wake word ile denenirken hata: {e}")
@@ -43,11 +43,11 @@ class WakeWordListener:
                 
                 # List all available keywords
                 available_keywords = pvporcupine.KEYWORDS
-                print(f"Kullanılabilir anahtar kelimeler: {available_keywords}")
+                print(f"Kullanilabilir anahtar kelimeler: {available_keywords}")
                 
                 if self.wake_word not in available_keywords:
-                    print(f"'{self.wake_word}' mevcut anahtar kelimeler arasında değil.")
-                    print(f"'picovoice' anahtar kelimesini kullanılıyor...")
+                    print(f"'{self.wake_word}' mevcut anahtar kelimeler arasinda değil.")
+                    print(f"'picovoice' anahtar kelimesini kullaniliyor...")
                     self.wake_word = 'picovoice'
                 
                 self.porcupine = pvporcupine.create(
@@ -64,7 +64,7 @@ class WakeWordListener:
             return True
         except Exception as e:
             print(f"Porcupine initialization error: {e}")
-            print("Detaylı hata bilgisi:", repr(e))
+            print("Detayli hata bilgisi:", repr(e))
             return False
             
     def start_listening(self):

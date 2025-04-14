@@ -5,13 +5,13 @@ import zipfile
 import shutil
 import time
 
-# tqdm kütüphanesini yüklü olma kontrolü
+# tqdm kutuphanesini yuklu olma kontrolu
 try:
     from tqdm import tqdm
     HAS_TQDM = True
 except ImportError:
     HAS_TQDM = False
-    print("Not: tqdm kütüphanesi bulunamadı, basit ilerleme çubuğu kullanılacak.")
+    print("Not: tqdm kutuphanesi bulunamadi, basit ilerleme çubuğu kullanilacak.")
     print("Gelişmiş ilerleme çubuğu için: pip install tqdm")
 
 def simple_progress_bar(current, total, bar_length=40):
@@ -33,7 +33,7 @@ def download_file(url, filename):
         total_size = int(response.headers.get('content-length', 0))
         block_size = 1024
         
-        print(f"Dosya indirilmeye başlanıyor: {filename}")
+        print(f"Dosya indirilmeye başlaniyor: {filename}")
         print(f"Toplam boyut: {total_size / (1024*1024):.2f} MB")
         
         if HAS_TQDM:
@@ -57,11 +57,11 @@ def download_file(url, filename):
                     f.write(data)
                     downloaded += len(data)
                     
-                    # Her 100KB'da bir güncelle
+                    # Her 100KB'da bir guncelle
                     if downloaded % (block_size * 100) == 0:
                         simple_progress_bar(downloaded, total_size)
                         
-                        # İndirme hızı hesapla
+                        # İndirme hizi hesapla
                         elapsed = time.time() - start_time
                         if elapsed > 0:
                             speed = downloaded / (1024 * 1024 * elapsed)
@@ -72,7 +72,7 @@ def download_file(url, filename):
                 
         return True
     except Exception as e:
-        print(f"İndirme hatası: {e}")
+        print(f"İndirme hatasi: {e}")
         return False
 
 def download_vosk_model():
@@ -88,11 +88,11 @@ def download_vosk_model():
     
     # Check if model already exists
     if os.path.exists(model_dir):
-        print(f"Model klasörü '{model_dir}' zaten mevcut. İndirme işlemi atlanıyor.")
+        print(f"Model klasoru '{model_dir}' zaten mevcut. İndirme işlemi atlaniyor.")
         return True
     
-    print(f"Vosk Türkçe modeli indiriliyor: {model_url}")
-    print("Bu işlem dosya boyutuna bağlı olarak birkaç dakika sürebilir...")
+    print(f"Vosk Turkçe modeli indiriliyor: {model_url}")
+    print("Bu işlem dosya boyutuna bağli olarak birkaç dakika surebilir...")
     
     try:
         # İndirme işlemi
@@ -100,7 +100,7 @@ def download_vosk_model():
             return False
         
         # Extract the model
-        print(f"ZIP dosyası çıkartılıyor: {model_zip}")
+        print(f"ZIP dosyasi çikartiliyor: {model_zip}")
         with zipfile.ZipFile(model_zip, 'r') as zip_ref:
             # Get the name of the folder inside the zip
             folder_name = zip_ref.namelist()[0].split('/')[0]
@@ -117,21 +117,21 @@ def download_vosk_model():
         # Remove the zip file
         os.remove(model_zip)
         
-        print(f"Vosk Türkçe modeli başarıyla indirildi ve çıkartıldı: {model_dir}")
+        print(f"Vosk Turkçe modeli başariyla indirildi ve çikartildi: {model_dir}")
         return True
     except Exception as e:
         print(f"Hata: {e}")
         return False
 
 if __name__ == "__main__":
-    print("Vosk Türkçe Model İndirme Aracı")
+    print("Vosk Turkçe Model İndirme Araci")
     print("-" * 40)
     
-    # Requests kütüphanesini kontrol et
+    # Requests kutuphanesini kontrol et
     try:
         import requests
     except ImportError:
-        print("Requests kütüphanesi bulunamadı. Yükleniyor...")
+        print("Requests kutuphanesi bulunamadi. Yukleniyor...")
         try:
             import pip
             if hasattr(pip, 'main'):
@@ -140,19 +140,19 @@ if __name__ == "__main__":
                 import pip._internal
                 pip._internal.main(['install', 'requests'])
                 
-            # Modül yeniden yükleniyor
+            # Modul yeniden yukleniyor
             import requests
-            print("Requests kütüphanesi yüklendi.")
+            print("Requests kutuphanesi yuklendi.")
         except Exception as e:
-            print(f"Requests kütüphanesi yüklenemedi: {e}")
-            print("Lütfen manuel olarak yükleyin: pip install requests")
+            print(f"Requests kutuphanesi yuklenemedi: {e}")
+            print("Lutfen manuel olarak yukleyin: pip install requests")
             sys.exit(1)
     
     success = download_vosk_model()
     
     if success:
-        print("Model başarıyla indirildi ve kuruldu.")
+        print("Model başariyla indirildi ve kuruldu.")
     else:
-        print("Model indirme işlemi başarısız oldu.")
+        print("Model indirme işlemi başarisiz oldu.")
         
-    input("Devam etmek için bir tuşa basın...") 
+    input("Devam etmek için bir tuşa basin...") 

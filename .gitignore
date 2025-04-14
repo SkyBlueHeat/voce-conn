@@ -1,7 +1,3 @@
-# Auto detect text files and perform LF normalization
-* text=auto
-
-
 
 
 # Python tarafından oluşturulan dosyalar
@@ -19,4 +15,4 @@ temp.txt
 *.tmp
 
 # Kullanıcıya özel dosyalar
-vosk-model-tr/
+vosk-model-tr/ 

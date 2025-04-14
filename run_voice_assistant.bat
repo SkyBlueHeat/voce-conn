@@ -90,10 +90,10 @@ echo ===================================
 
 :menu
 echo.
-echo Lütfen bir seçenek seçin:
-echo 1 - Mikrofonları listele (detaylı liste)
+echo Lutfen bir seçenek seçin:
+echo 1 - Mikrofonlari listele (detayli liste)
 echo 2 - Belirli bir mikrofon seç
-echo 3 - Varsayılan mikrofon ile başlat
+echo 3 - Varsayilan mikrofon ile başlat
 echo.
 set /p choice="Seçiminizi girin (1-3): "
 
@@ -105,34 +105,34 @@ if "%choice%"=="1" (
     if exist list_microphones.py (
         %PYTHON_CMD% list_microphones.py
     ) else (
-        echo list_microphones.py bulunamadı, alternatif listeleyici kullanılıyor...
-        %PYTHON_CMD% -c "import speech_recognition as sr; print('\nKullanılabilir Mikrofonlar:'); [print(f'{i}: {name}') for i, name in enumerate(sr.Microphone.list_microphone_names())]"
+        echo list_microphones.py bulunamadi, alternatif listeleyici kullaniliyor...
+        %PYTHON_CMD% -c "import speech_recognition as sr; print('\nKullanilabilir Mikrofonlar:'); [print(f'{i}: {name}') for i, name in enumerate(sr.Microphone.list_microphone_names())]"
     )
     goto menu
 )
 
 if "%choice%"=="2" (
     echo.
-    set /p MIC_INDEX="Kullanmak istediğiniz mikrofonun numarasını girin: "
+    set /p MIC_INDEX="Kullanmak istediğiniz mikrofonun numarasini girin: "
     goto runWithMic
 )
 
 if "%choice%"=="3" (
     echo.
-    echo Varsayılan mikrofon kullanılıyor.
-    echo Sesli asistan başlatılıyor...
+    echo Varsayilan mikrofon kullaniliyor.
+    echo Sesli asistan başlatiliyor...
     %PYTHON_CMD% main.py
     goto end
 ) else (
     echo.
-    echo Geçersiz seçim. Lütfen tekrar deneyin.
+    echo Geçersiz seçim. Lutfen tekrar deneyin.
     goto menu
 )
 
 :runWithMic
 echo.
-echo %MIC_INDEX% numaralı mikrofon seçildi.
-echo Sesli asistan başlatılıyor...
+echo %MIC_INDEX% numarali mikrofon seçildi.
+echo Sesli asistan başlatiliyor...
 %PYTHON_CMD% main.py --mic=%MIC_INDEX%
 goto end
 
